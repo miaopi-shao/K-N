@@ -1,0 +1,185 @@
+
+月月配試算器.html
+
+第
+1
+頁
+(
+共
+1
+頁)
+100%
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETF 月月配組合精算器</title>
+    <style>
+        body { font-family: "Microsoft JhengHei", sans-serif; margin: 20px; background-color: #f0f2f5; color: #333; }
+        .container { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { color: #1a73e8; text-align: center; border-bottom: 2px solid #1a73e8; padding-bottom: 10px; }
+        .config-section { margin-bottom: 20px; padding: 15px; background: #e8f0fe; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: #fff; }
+        th, td { border: 1px solid #dee2e6; padding: 10px; text-align: center; }
+        th { background-color: #5f6368; color: white; }
+        input[type="number"], input[type="text"] { width: 80%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; text-align: center; }
+        .month-box { display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; font-size: 0.8em; }
+        .month-item { background: #f8f9fa; border: 1px solid #ddd; padding: 2px; cursor: pointer; }
+        .month-item.active { background: #34a853; color: white; border-color: #2d8e47; }
+        
+        .result-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 20px; }
+        .month-card { background: #fff; border: 1px solid #e0e0e0; padding: 10px; border-radius: 8px; text-align: center; }
+        .month-card h4 { margin: 0 0 5px 0; color: #5f6368; }
+        .month-card .amt { font-size: 1.2em; font-weight: bold; color: #d93025; }
+        .low-income { background-color: #fce8e6; }
+        .btn { cursor: pointer; border: none; border-radius: 4px; padding: 10px 20px; font-weight: bold; transition: 0.3s; }
+        .btn-add { background-color: #1a73e8; color: white; margin-bottom: 15px; }
+        .btn-del { background-color: #ea4335; color: white; padding: 5px 10px; }
+        .summary-bar { background: #202124; color: white; padding: 15px; border-radius: 8px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .highlight { color: #fbbc04; font-size: 1.3em; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>ETF 月月配組合領息試算</h2>
+    
+    <div class="config-section">
+        <label>每月目標領息金額：</label>
+        <input type="number" id="targetIncome" value="40000" style="width: 120px;" oninput="calculate()"> 元
+        <span style="margin-left: 15px; color: #666;">(目標是讓 1~12 月每個月都盡量達到此金額)</span>
+    </div>
+
+    <button class="btn btn-add" onclick="addRow()">+ 新增 ETF 標的</button>
+
+    <table id="etfTable">
+        <thead>
+            <tr>
+                <th width="15%">ETF 名稱</th>
+                <th width="12%">單次配息(元/張)</th>
+                <th width="12%">參考股價(元)</th>
+                <th width="25%">配息月份 (點選切換)</th>
+                <th width="12%">需持有張數</th>
+                <th width="12%">投入本金</th>
+                <th width="10%">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="text" value="0056" class="name"></td>
+                <td><input type="number" value="866" class="dividend" oninput="calculate()"></td>
+                <td><input type="number" value="37" class="price" oninput="calculate()"></td>
+                <td>
+                    <div class="month-box">
+                        <div class="month-item active" onclick="toggleMonth(this)">1</div><div class="month-item" onclick="toggleMonth(this)">2</div><div class="month-item" onclick="toggleMonth(this)">3</div>
+                        <div class="month-item active" onclick="toggleMonth(this)">4</div><div class="month-item" onclick="toggleMonth(this)">5</div><div class="month-item" onclick="toggleMonth(this)">6</div>
+                        <div class="month-item active" onclick="toggleMonth(this)">7</div><div class="month-item" onclick="toggleMonth(this)">8</div><div class="month-item" onclick="toggleMonth(this)">9</div>
+                        <div class="month-item active" onclick="toggleMonth(this)">10</div><div class="month-item" onclick="toggleMonth(this)">11</div><div class="month-item" onclick="toggleMonth(this)">12</div>
+                    </div>
+                </td>
+                <td class="shares">0</td>
+                <td class="cost">0</td>
+                <td><button class="btn btn-del" onclick="deleteRow(this)">刪除</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>每月領息總覽</h3>
+    <div class="result-grid" id="monthGrid">
+        </div>
+
+    <div class="summary-bar">
+        <div>預估總投入本金：<span id="totalCapital" class="highlight">0</span> 萬元</div>
+        <div>平均月領金額：<span id="avgMonthly" class="highlight">0</span> 元</div>
+    </div>
+</div>
+
+<script>
+    function toggleMonth(el) {
+        el.classList.toggle('active');
+        calculate();
+    }
+
+    function addRow() {
+        const tbody = document.querySelector("#etfTable tbody");
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td><input type="text" value="新標的" class="name"></td>
+            <td><input type="number" value="500" class="dividend" oninput="calculate()"></td>
+            <td><input type="number" value="20" class="price" oninput="calculate()"></td>
+            <td>
+                <div class="month-box">
+                    ${[1,2,3,4,5,6,7,8,9,10,11,12].map(m => `<div class="month-item" onclick="toggleMonth(this)">${m}</div>`).join('')}
+                </div>
+            </td>
+            <td class="shares">0</td>
+            <td class="cost">0</td>
+            <td><button class="btn btn-del" onclick="deleteRow(this)">刪除</button></td>
+        `;
+        tbody.appendChild(row);
+        calculate();
+    }
+
+    function deleteRow(btn) {
+        btn.closest("tr").remove();
+        calculate();
+    }
+
+    function calculate() {
+        const target = parseFloat(document.getElementById("targetIncome").value) || 0;
+        const rows = document.querySelectorAll("#etfTable tbody tr");
+        let monthlyIncome = new Array(12).fill(0);
+        let totalCapital = 0;
+
+        rows.forEach(row => {
+            const div = parseFloat(row.querySelector(".dividend").value) || 0;
+            const price = parseFloat(row.querySelector(".price").value) || 0;
+            const activeMonths = Array.from(row.querySelectorAll(".month-item.active")).map(el => parseInt(el.innerText));
+            
+            if (activeMonths.length === 0 || div === 0) {
+                row.querySelector(".shares").innerText = "0 張";
+                row.querySelector(".cost").innerText = "0 萬元";
+                return;
+            }
+
+            // 核心邏輯：為了讓「有配息的月份」都能達到 target，張數 = 目標 / 單次配息
+            let shares = (target / div).toFixed(1);
+            let costInWan = (shares * price * 1000) / 10000;
+
+            row.querySelector(".shares").innerText = shares + " 張";
+            row.querySelector(".cost").innerText = costInWan.toFixed(1) + " 萬元";
+            totalCapital += costInWan;
+
+            // 累加到月份總覽
+            activeMonths.forEach(m => {
+                monthlyIncome[m-1] += (shares * div);
+            });
+        });
+
+        // 更新月份卡片
+        const grid = document.getElementById("monthGrid");
+        grid.innerHTML = "";
+        monthlyIncome.forEach((amt, i) => {
+            const isLow = amt < target * 0.9;
+            grid.innerHTML += `
+                <div class="month-card ${isLow ? 'low-income' : ''}">
+                    <h4>${i+1} 月</h4>
+                    <div class="amt">${Math.round(amt).toLocaleString()}</div>
+                    <div style="font-size:0.7em; color:#888;">${isLow ? '未達標' : '已達標'}</div>
+                </div>
+            `;
+        });
+
+        document.getElementById("totalCapital").innerText = totalCapital.toFixed(1);
+        const avg = monthlyIncome.reduce((a,b) => a+b, 0) / 12;
+        document.getElementById("avgMonthly").innerText = Math.round(avg).toLocaleString();
+    }
+
+    // 初始化
+    window.onload = calculate;
+</script>
+
+</body>
+</html>
+目前顯示的是「月月配試算器.html」。
