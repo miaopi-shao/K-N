@@ -94,13 +94,30 @@ body {
     box-shadow: 0 4px 12px var(--shadow-secondary);
 }
 
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--text-accent);
+    padding-bottom: 10px;
+}
+
+.version-info {
+    font-size: 0.8em;
+    color: var(--text-secondary);
+    font-weight: normal;
+    opacity: 0.8;
+}
+
 h2 {
     color: var(--text-accent);
     text-align: center;
-    border-bottom: 2px solid var(--text-accent);
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
     font-size: 1.5em;
+    flex: 1;
 }
 
 h3 {
@@ -291,6 +308,17 @@ input[type="number"]:focus, input[type="text"]:focus {
         padding: 15px;
         margin: 0;
         border-radius: 8px;
+    }
+
+    .header-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .version-info {
+        font-size: 0.75em;
+        align-self: flex-end;
     }
 
     .theme-toggle {
