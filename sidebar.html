@@ -1,0 +1,291 @@
+<!-- 側邊欄導航 -->
+<div class="sidebar" id="sidebar">
+    <!-- 主頁按鈕 -->
+    <div class="sidebar-header">
+        <button class="sidebar-home-btn" onclick="goHome()" title="回到主頁">🏠</button>
+        <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="摺疊/展開">☰</button>
+    </div>
+
+    <!-- 部分一：內部功能 -->
+    <div class="sidebar-section">
+        <div class="sidebar-section-title">🔧 內部功能</div>
+        <div class="sidebar-links">
+            <a href="index.html" class="sidebar-link" onclick="setActiveLink(event)">ETF 月月配試算</a>
+            <!-- 之後可以添加更多內部功能 -->
+        </div>
+    </div>
+
+    <!-- 部分二：其他專案 -->
+    <div class="sidebar-section">
+        <div class="sidebar-section-title">📁 其他專案</div>
+        <div class="sidebar-links">
+            <a href="#" class="sidebar-link" data-url="">待新增專案 1</a>
+            <a href="#" class="sidebar-link" data-url="">待新增專案 2</a>
+            <!-- 可編輯區域：在此添加其他專案的URL -->
+        </div>
+    </div>
+
+    <!-- 部分三：好網站 -->
+    <div class="sidebar-section">
+        <div class="sidebar-section-title">🌟 好網站</div>
+        <div class="sidebar-links">
+            <a href="https://www.google.com" target="_blank" class="sidebar-link">Google</a>
+            <a href="https://www.github.com" target="_blank" class="sidebar-link">GitHub</a>
+            <a href="https://www.youtube.com" target="_blank" class="sidebar-link">YouTube</a>
+            <a href="https://www.wikipedia.org" target="_blank" class="sidebar-link">Wikipedia</a>
+            <a href="https://stackoverflow.com" target="_blank" class="sidebar-link">Stack Overflow</a>
+            <!-- 可編輯區域：在此添加更多好網站 -->
+        </div>
+    </div>
+
+    <!-- 側邊欄底部 -->
+    <div class="sidebar-footer">
+        <small>©2026 ETF 工具站</small>
+    </div>
+</div>
+
+<style>
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 220px;
+        height: 100vh;
+        background: var(--bg-secondary);
+        border-right: 1px solid var(--border-primary);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 2px 0 8px var(--shadow-primary);
+        z-index: 500;
+        overflow-y: auto;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+        width: 60px;
+    }
+
+    .sidebar-header {
+        padding: 15px;
+        display: flex;
+        gap: 10px;
+        border-bottom: 1px solid var(--border-primary);
+        flex-shrink: 0;
+    }
+
+    .sidebar-home-btn,
+    .sidebar-toggle-btn {
+        background: var(--btn-primary);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-size: 1.1em;
+        transition: all 0.3s ease;
+        flex: 1;
+    }
+
+    .sidebar-home-btn:hover,
+    .sidebar-toggle-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+    }
+
+    .sidebar-section {
+        padding: 20px 15px;
+        border-bottom: 1px solid var(--border-primary);
+        flex-shrink: 0;
+    }
+
+    .sidebar.collapsed .sidebar-section {
+        padding: 15px 8px;
+    }
+
+    .sidebar-section-title {
+        font-weight: bold;
+        color: var(--text-accent);
+        margin-bottom: 12px;
+        font-size: 0.9em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .sidebar-links {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .sidebar-link {
+        display: block;
+        padding: 10px 12px;
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 0.9em;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .sidebar-link:hover {
+        background: var(--text-accent);
+        color: white;
+        transform: translateX(4px);
+    }
+
+    .sidebar-link.active {
+        background: var(--text-success);
+        color: white;
+        font-weight: bold;
+    }
+
+    .sidebar-footer {
+        margin-top: auto;
+        padding: 15px;
+        text-align: center;
+        font-size: 0.8em;
+        color: var(--text-secondary);
+        border-top: 1px solid var(--border-primary);
+        flex-shrink: 0;
+    }
+
+    .sidebar.collapsed .sidebar-section-title,
+    .sidebar.collapsed .sidebar-link {
+        text-align: center;
+        padding: 8px 4px;
+        font-size: 0.8em;
+    }
+
+    .sidebar.collapsed .sidebar-section {
+        padding: 10px 4px;
+    }
+
+    /* 主容器調整 */
+    body {
+        margin-left: 220px;
+        transition: margin-left 0.3s ease;
+    }
+
+    body.sidebar-collapsed {
+        margin-left: 60px;
+    }
+
+    .container {
+        margin-left: 0 !important;
+    }
+
+    /* 響應式設計 */
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 180px;
+        }
+
+        .sidebar.collapsed {
+            width: 50px;
+        }
+
+        body {
+            margin-left: 180px;
+        }
+
+        body.sidebar-collapsed {
+            margin-left: 50px;
+        }
+
+        .sidebar-link {
+            font-size: 0.85em;
+            padding: 8px 10px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .sidebar {
+            position: fixed;
+            left: -220px;
+            width: 220px;
+        }
+
+        .sidebar.mobile-open {
+            left: 0;
+        }
+
+        .sidebar.collapsed {
+            left: -60px;
+            width: 60px;
+        }
+
+        .sidebar.collapsed.mobile-open {
+            left: 0;
+            width: 60px;
+        }
+
+        body {
+            margin-left: 0;
+        }
+
+        .sidebar-toggle-btn {
+            display: block;
+        }
+    }
+</style>
+
+<script>
+    // 側邊欄控制函數
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('collapsed');
+        document.body.classList.toggle('sidebar-collapsed');
+        localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+    }
+
+    function goHome() {
+        window.location.href = 'welcome.html';
+    }
+
+    function setActiveLink(event) {
+        // 移除所有活躍狀態
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.classList.remove('active');
+        });
+        // 設置當前鏈接為活躍
+        if (event.target.classList.contains('sidebar-link')) {
+            event.target.classList.add('active');
+        }
+    }
+
+    // 初始化側邊欄狀態
+    window.addEventListener('DOMContentLoaded', () => {
+        const isSidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+        if (isSidebarCollapsed) {
+            document.getElementById('sidebar').classList.add('collapsed');
+            document.body.classList.add('sidebar-collapsed');
+        }
+
+        // 設置當前頁面的活躍鏈接
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            if (link.getAttribute('href') === currentPage) {
+                link.classList.add('active');
+            }
+        });
+
+        // 響應式：手機裝置觸摸處理
+        if (window.innerWidth < 480) {
+            document.addEventListener('click', (e) => {
+                const sidebar = document.getElementById('sidebar');
+                const isClickInsideSidebar = sidebar.contains(e.target);
+                const isToggleBtn = e.target.closest('.sidebar-toggle-btn');
+                
+                if (!isClickInsideSidebar && !isToggleBtn && sidebar.classList.contains('mobile-open')) {
+                    sidebar.classList.remove('mobile-open');
+                }
+            });
+        }
+    });
+</script>
