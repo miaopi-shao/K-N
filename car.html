@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>車輛保養追蹤器</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <h2>🚗 汽機車保養紀錄</h2>
+        
+        <section id="form-section">
+            <input type="text" id="itemName" placeholder="項目 (如：機油)">
+            <input type="number" id="mileage" placeholder="當前里程 (km)">
+            <input type="date" id="serviceDate" required>
+            <button onclick="saveRecord()">紀錄並計算</button>
+        </section>
+
+        <hr>
+
+        <section id="dashboard">
+            <h3>下次保養預測</h3>
+            <div id="alertList"></div>
+        </section>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
