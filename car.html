@@ -3,23 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>車輛保養管理系統 v1.0</title>
+    <title>車輛保養管理系統</title>
     <link rel="stylesheet" href="car.css">
 </head>
 <body>
     <nav class="sidebar">
-        <div style="padding: 20px; font-weight: bold; color: var(--text-accent);">車輛管理選單</div>
-        <div class="tab-item" onclick="showPage('dashboard')">
-            <span class="tab-icon">📊</span>
-            <span>總覽面板</span>
+        <div style="padding: 20px; font-weight: bold; color: var(--text-accent); border-bottom: 1px solid var(--border-primary);">車輛管理</div>
+        <div class="tab-item" onclick="location.reload()">
+            <span class="tab-icon">📊</span><span>總覽面板</span>
         </div>
-        <div class="tab-item" onclick="showPage('records')">
-            <span class="tab-icon">🛠️</span>
-            <span>保養紀錄</span>
-        </div>
-        <div class="tab-item" onclick="showPage('settings')">
-            <span class="tab-icon">⚙️</span>
-            <span>設定</span>
+        <div class="tab-item">
+            <span class="tab-icon">⚙️</span><span>系統設定</span>
         </div>
     </nav>
 
@@ -27,52 +21,47 @@
         <button class="theme-toggle" id="themeToggle">🌓</button>
 
         <header class="header-section">
-            <h2>車輛保養追蹤 <span class="version-info">v1.0.0</span></h2>
+            <h2>車輛保養紀錄 <span class="version-info">v1.0.0</span></h2>
         </header>
 
         <section class="summary-card">
             <div class="summary-item">
-                <span class="summary-label">當前里程</span>
+                <span class="summary-label">目前總里程</span>
                 <div class="balance" id="displayTotalMileage">0 km</div>
             </div>
             <div class="summary-item">
-                <span class="summary-label">下回保養剩餘</span>
+                <span class="summary-label">下次保養倒數</span>
                 <div class="balance" id="displayRemainingKm">-- km</div>
             </div>
             <div class="summary-item">
-                <span class="summary-label">本月支出</span>
+                <span class="summary-label">本月保養支出</span>
                 <div class="amount expense-text" id="displayMonthCost">$0</div>
             </div>
         </section>
 
-        <section id="records" class="page">
-            <div class="form-section">
-                <h3>新增保養紀錄</h3>
-                <div class="form-group">
-                    <label>保養日期 (必填)</label>
-                    <input type="date" id="inputDate" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label>當前里程 (km)</label>
-                    <input type="number" id="inputMileage" class="form-input" placeholder="請輸入當下儀表里程">
-                </div>
-                <div class="form-group">
-                    <label>項目名稱</label>
-                    <input type="text" id="inputItem" class="form-input" placeholder="例如：機油、濾芯">
-                </div>
-                <div class="form-group">
-                    <label>費用</label>
-                    <input type="number" id="inputCost" class="form-input" placeholder="支出金額">
-                </div>
-                <button class="btn btn-primary" onclick="addRecord()">存入 GitHub 本地紀錄</button>
+        <section class="form-section">
+            <h3>📝 新增保養項目</h3>
+            <div class="form-group">
+                <label>保養日期</label>
+                <input type="date" id="inputDate" class="form-input" required>
             </div>
-
-            <hr class="section-divider">
-
-            <h3>歷史紀錄流</h3>
-            <div id="recordList" class="records-list">
-                </div>
+            <div class="form-group">
+                <label>儀表里程 (km)</label>
+                <input type="number" id="inputMileage" class="form-input" placeholder="輸入目前里程數">
+            </div>
+            <div class="form-group">
+                <label>維修項目</label>
+                <input type="text" id="inputItem" class="form-input" placeholder="如：換機油、齒輪油">
+            </div>
+            <div class="form-group">
+                <label>費用 (NTD)</label>
+                <input type="number" id="inputCost" class="form-input" placeholder="輸入支出金額">
+            </div>
+            <button class="btn btn-primary" onclick="addRecord()">儲存紀錄</button>
         </section>
+
+        <div id="recordList" class="records-list">
+            </div>
     </main>
 
     <script src="car.js"></script>
