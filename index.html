@@ -8,6 +8,9 @@
 </head>
 <body>
 
+<!-- 側邊欄容器 -->
+<div id="sidebarContainer"></div>
+
 <button class="theme-toggle" id="themeToggle" title="切換主題">🌙</button>
 
 <div class="container">
@@ -74,6 +77,37 @@
         <div>平均月領金額：<span id="avgMonthly" class="highlight">0</span> 元</div>
     </div>
 </div>
+
+<!-- 側邊欄載入腳本 -->
+<script>
+    // 載入側邊欄
+    fetch('sidebar.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('sidebarContainer').innerHTML = html;
+            
+            // 設置側邊欄狀態
+            setTimeout(() => {
+                const isSidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+                if (isSidebarCollapsed) {
+                    const sidebar = document.getElementById('sidebar');
+                    if (sidebar) {
+                        sidebar.classList.add('collapsed');
+                        document.body.classList.add('sidebar-collapsed');
+                    }
+                }
+
+                // 設置當前頁面的活躍鏈接
+                const currentPage = 'index.html';
+                document.querySelectorAll('.sidebar-link').forEach(link => {
+                    if (link.getAttribute('href') === currentPage) {
+                        link.classList.add('active');
+                    }
+                });
+            }, 100);
+        })
+        .catch(err => console.log('側邊欄載入失敗:', err));
+</script>
 
 <script src="script.js"></script>
 
