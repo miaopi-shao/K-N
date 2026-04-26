@@ -50,7 +50,7 @@ function enterMain() {
     
     // 延遲進入以顯示動畫
     setTimeout(() => {
-        window.location.href = 'home.html';
+        window.location.href = 'index.html';
     }, 800);
 }
 
