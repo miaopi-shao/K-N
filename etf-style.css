@@ -1,58 +1,15 @@
-/* ETF 頁面專屬組件 (與 styles.css 互補) */
+/* 月份選擇按鈕 (1.4 魂) */
+.month-selector { display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; width: 160px; margin: auto; }
+.m-bit { border: 1px solid #ccc; font-size: 11px; cursor: pointer; padding: 2px 0; background: #fff; text-align: center; color: #333; }
+.m-bit.active { background-color: #34495e; color: #fff; border-color: #2c3e50; }
 
-.month-box {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 2px;
-    max-width: 200px;
-    margin: auto;
-}
+/* 12個月總覽格 */
+.result-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 15px; }
+.m-card { background: #fff; border: 1px solid #ddd; padding: 10px; text-align: center; border-radius: 4px; }
+.m-card.reach { background-color: #e8f8f5; border-top: 4px solid #2ecc71; }
 
-.month-item {
-    border: 1px solid var(--border-primary, #ccc);
-    font-size: 11px;
-    padding: 2px 0;
-    cursor: pointer;
-    background: #fff;
-    text-align: center;
-}
+.m-title { font-size: 12px; color: #7f8c8d; }
+.m-val { font-weight: bold; font-size: 1.1rem; color: #2c3e50; }
 
-.month-item.active {
-    background-color: var(--text-accent, #2c3e50);
-    color: white;
-}
-
-.result-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 10px;
-    margin: 20px 0;
-}
-
-.month-card {
-    background: var(--bg-tertiary, #f8f9fa);
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-    border: 1px solid var(--border-primary, #eee);
-}
-
-.month-card.reach {
-    background-color: #e8f8f5;
-    border-color: #2ecc71;
-}
-
-.m-title { font-size: 12px; color: #666; }
-.m-value { font-weight: bold; font-size: 1.2rem; margin-top: 5px; }
-
-.summary-bar {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: var(--text-accent, #2c3e50);
-    color: white;
-    display: flex;
-    justify-content: space-around;
-    border-radius: 8px;
-}
-
-.highlight { color: #f1c40f; font-weight: bold; font-size: 1.3rem; }
+/* 表格內輸入框微調 */
+#etfTable input.form-input { width: 90%; text-align: center; }
