@@ -51,6 +51,21 @@ function toggleSidebar() {
     localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
 }
 
+// 5. 設置欄功能運作 (讓全站頁面都能呼叫)
+function setFontSize(size) {
+    const root = document.documentElement;
+    let pixelSize = '16px';
+    switch(size) {
+        case 'small': pixelSize = '14px'; break;
+        case 'normal': pixelSize = '16px'; break;
+        case 'large': pixelSize = '18px'; break;
+        case 'xlarge': pixelSize = '20px'; break;
+    }
+    root.style.setProperty('--base-font-size', pixelSize);
+    localStorage.setItem('userFontSize', size);
+    updateSettingsButtonStates(); // 更新按鈕高亮
+}
+
 // 初始化啟動
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
