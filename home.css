@@ -1,4 +1,6 @@
 :root {
+    --sidebar-width: 220px;
+    --sidebar-collapsed-width: 60px;
     /* 亮色主題變數 */
     --bg-primary: #f0f2f5;
     --bg-secondary: #ffffff;
@@ -215,6 +217,16 @@ section h2 {
     text-decoration: underline;
 }
 
+/* 連動補丁：確保側邊欄與內容區同步 */
+body {
+    margin-left: var(--sidebar-width) !important;
+    transition: margin-left 0.3s ease !important;
+}
+
+body.sidebar-collapsed {
+    margin-left: var(--sidebar-collapsed-width) !important;
+}
+
 /* 響應式設計 */
 @media (max-width: 768px) {
     body {
@@ -267,5 +279,11 @@ section h2 {
 
     .feature-icon {
         font-size: 2.5em;
+    }
+}
+
+@media (max-width: 480px) {
+    body, body.sidebar-collapsed {
+        margin-left: 0 !important;
     }
 }
