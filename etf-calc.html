@@ -10,9 +10,42 @@
 </head>
 <body>
 
-    <div id="sidebarContainer"></div>
-
     <div class="container">
+        <header class="header-section">
+            <h1 data-i18n="etf-title">📊 ETF 月月配組合精算器</h1>
+            <div class="header-btns">
+                <button class="btn btn-primary" onclick="addRow()" data-i18n="etf-add-btn">➕ 新增標的</button>
+                <button class="btn btn-secondary" onclick="handleSaveBackup()" data-i18n="etf-save-btn">💾 儲存備份</button>
+            </div>
+        </header>
+
+        <section class="config-section">
+            <div class="form-group">
+                <label data-i18n="etf-target-label">🎯 目標月領息：</label>
+                <input type="number" id="targetIncome" value="10000" oninput="calculate()" class="form-input">
+            </div>
+        </section>
+
+        <div class="table-wrapper">
+            <table id="etfTable">
+                <thead>
+                    <tr>
+                        <th data-i18n="etf-th-code">代號/名稱</th>
+                        <th data-i18n="etf-th-price">現價</th>
+                        <th data-i18n="etf-th-dividend">配息金額</th>
+                        <th data-i18n="etf-th-months">配息月份</th>
+                        <th data-i18n="etf-th-calc">試算結果</th>
+                        <th data-i18n="etf-th-action">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+
+        <div class="summary-bar" id="summaryBar">
+            </div>
+    </div>
         </div>
 
     <script src="etf-calc.js"></script>
