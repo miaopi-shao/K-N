@@ -11,46 +11,63 @@
 
 <div id="sidebarContainer"></div>
 
+<button class="theme-toggle" id="themeToggle" title="切換主題">🌙</button>
+
 <div class="container">
-    
-    <div class="header-section">
-        <h2 data-i18n="acc-header">💰 記帳系統</h2>
-        <div class="version-info">版本: 1.4 (對接全站變數)</div>
-    </div>
-
     <div class="tab-container">
-    <div class="tab-item" onclick="showPage('year')">
-        <span data-i18n="acc-tab-year">年總覽</span>
+        <div class="tab-item" onclick="showPage('month')">
+            <span class="tab-icon">📅</span>
+            <span data-i18n="acc-tab-month">月明細</span>
+        </div>
+        <div class="tab-item" onclick="showPage('day')">
+            <span class="tab-icon">📝</span>
+            <span data-i18n="acc-tab-add">新增記錄</span>
+        </div>
+        <div class="tab-item" onclick="showPage('year')">
+            <span class="tab-icon">📊</span>
+            <span data-i18n="acc-tab-year">年統計</span>
+        </div>
+        <div class="tab-item" onclick="showPage('template')">
+            <span class="tab-icon">🎯</span>
+            <span data-i18n="acc-tab-tpl">範本設定</span>
+        </div>
     </div>
-    <div class="tab-item" onclick="showPage('month')">
-        <span data-i18n="acc-tab-month">月明細</span>
-    </div>
-    <div class="tab-item" onclick="showPage('day')">
-        <span data-i18n="acc-tab-day">日流水</span>
-    </div>
-    <div class="tab-item" onclick="showPage('template')">
-        <span data-i18n="acc-tab-tpl">範本設定</span>
-    </div>
-</div>
 
-    <div class="account-summary">
-        <div class="acc-card profit">
+    <div class="summary-card">
+        <div class="summary-item">
             <span class="summary-label" data-i18n="acc-balance">本期盈餘</span>
-            <div id="balanceDisplay" class="amt">0</div>
+            <div id="balanceDisplay" class="balance">0</div>
         </div>
-        <div class="acc-card income">
+        <div class="summary-item">
             <span class="summary-label" data-i18n="acc-income">總收入</span>
-            <div id="incomeDisplay" class="amt">0</div>
+            <div id="incomeDisplay" class="amount income-text">0</div>
         </div>
-        <div class="acc-card expense">
+        <div class="summary-item">
             <span class="summary-label" data-i18n="acc-expense">總支出</span>
-            <div id="expenseDisplay" class="amt">0</div>
+            <div id="expenseDisplay" class="amount expense-text">0</div>
         </div>
     </div>
 
-    <div id="editModal" class="modal">
+    <div id="editModal" class="modal hidden">
         <div class="modal-content">
             <h3 data-i18n="acc-edit-title">修改帳務</h3>
+            <input type="hidden" id="editId">
+            <div class="form-group">
+                <label>日期：</label>
+                <input type="date" id="editDate">
+            </div>
+            <div class="form-group">
+                <label>項目：</label>
+                <input type="text" id="editItem">
+            </div>
+            <div class="form-group">
+                <label>金額：</label>
+                <input type="number" id="editAmount">
+            </div>
+            <div class="form-group">
+                <label>備註：</label>
+                <input type="text" id="editNote">
+            </div>
             <div class="modal-buttons">
                 <button class="btn btn-success" onclick="updateRecord()">儲存修改</button>
                 <button class="btn btn-danger" onclick="deleteCurrentRecord()">刪除此筆</button>
@@ -58,39 +75,114 @@
             </div>
         </div>
     </div>
+    <!-- 頁面內容 -->
 
+    <!-- 月明細頁面 -->
     <div id="page-month" class="page">
-        <div class="filter-section" style="display: flex; gap: 10px; margin-bottom: 20px;">
-            <input type="month" id="monthFilter" onchange="render()" class="month-input" style="flex: 1;">
-            <button class="btn btn-primary" onclick="generateFromTemplate()">🚀 生成本月範本</button>
+        <div class="filter-section">
+            <input type="month" id="monthFilter" onchange="render()" class="month-input">
+            <button class="btn btn-primary" onclick="generateFromTemplate()">🚀 一鍵生成本月帳務</button>
         </div>
         <div id="monthList" class="records-list"></div>
     </div>
-
+    
+    <!-- 新增記錄頁面 -->
     <div id="page-day" class="page hidden">
         <div class="form-section">
-            <h3 data-i18n="acc-add-title">快速記帳</h3>
+            <h3 data-i18n="acc-add-title">新增紀錄</h3>
+            <div class="form-group">
+                <label>日期：</label>
+                <input type="date" id="dateInput" class="form-input">
+            </div>
             <div class="form-group">
                 <label>項目名稱：</label>
-                <input type="text" id="itemInput" class="form-input" placeholder="例如: Uber 薪資">
+                <input type="text" id="itemInput" class="form-input">
             </div>
             <div class="form-group">
                 <label>金額：</label>
-                <input type="number" id="amountInput" class="form-input" placeholder="支出請用負數">
+                <input type="number" id="amountInput" class="form-input">
             </div>
             <div class="form-group">
-                <label>分類選擇：</label>
+                <label>分類：</label>
                 <select id="typeInput" class="form-input">
                     <option value="臨時新增">臨時新增</option>
                     <option value="外送薪水">外送薪水</option>
-                    <option value="工程收入">工程收入</option>
-                    <option value="食物支出">食物支出</option>
+                    <option value="日薪">日薪</option>
+                    <option value="食物">食物</option>
+                    <option value="交通">交通</option>
+                    <option value="其他">其他</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label>備註：</label>
+                <input type="text" id="noteInput" class="form-input">
             </div>
             <button class="btn btn-success" onclick="saveRecord()" style="width: 100%;">✓ 確認加入</button>
         </div>
     </div>
+    
+    <!-- 年統計頁面 -->
+    <div id="page-year" class="page hidden">
+        <div class="form-section">
+            <label>選擇年份：</label>
+            <select id="yearFilter" onchange="renderYearly()" class="form-input"></select>
+        </div>
+        <div class="table-wrapper">
+            <table class="yearly-table">
+                <thead>
+                    <tr>
+                        <th>月份</th><th>收入</th><th>支出</th><th>盈餘</th>
+                    </tr>
+                </thead>
+                <tbody id="yearTableBody"></tbody>
+            </table>
+        </div>
+    </div>
 
+    <!-- 範本設定頁面 -->
+    <div id="page-template" class="page hidden">
+    <div class="form-section">
+        <h3 data-i18n="acc-tab-tpl">範本設定</h3>
+        <div class="form-group">
+            <label>週期：</label>
+            <select id="tplMonth" class="form-input">
+                <option value="all">每月重複</option>
+                <option value="01">1月</option><option value="02">2月</option><option value="03">3月</option>
+                <option value="04">4月</option><option value="05">5月</option><option value="06">6月</option>
+                <option value="07">7月</option><option value="08">8月</option><option value="09">9月</option>
+                <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>日期 (1~31)：</label>
+            <input type="number" id="tplDay" value="1" min="1" max="31" class="form-input">
+        </div>
+        <div class="form-group">
+            <label>項目名稱：</label>
+            <input type="text" id="tplItem" placeholder="例：房租、薪資..." class="form-input">
+        </div>
+        <div class="form-group">
+            <label>金額：</label>
+            <input type="number" id="tplAmount" placeholder="正數為收入，負數為支出" class="form-input">
+        </div>
+        <div class="form-group">
+            <label>分類：</label>
+            <select id="tplType" class="form-input">
+                <option value="預設支出">預設支出</option>
+                <option value="外送薪水">外送薪水</option>
+                <option value="股息收入">股息收入</option>
+                <option value="租金">租金</option>
+                <option value="公用事業">公用事業</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>備註：</label>
+            <input type="text" id="tplNote" placeholder="額外說明" class="form-input">
+        </div>
+        <button class="btn btn-success" onclick="saveTemplate()" style="width: 100%;">✓ 加入範本</button>
+        <hr class="section-divider">
+        <div id="templateList"></div>
+    </div>
 </div>
 
 <script src="i18n.js"></script>
