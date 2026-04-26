@@ -12,9 +12,10 @@
 <div id="sidebarContainer"></div>
 
 <div class="container">
+    
     <div class="header-section">
         <h2 data-i18n="acc-header">💰 記帳系統</h2>
-        <div class="version-info">版本: 1.1 (Standardized)</div>
+        <div class="version-info">版本: 1.4 (對接全站變數)</div>
     </div>
 
     <div class="tab-container">
@@ -36,18 +37,18 @@
         </div>
     </div>
 
-    <div class="summary-card">
-        <div class="summary-item">
+    <div class="account-summary">
+        <div class="acc-card profit">
             <span class="summary-label" data-i18n="acc-balance">本期盈餘</span>
-            <div id="balanceDisplay" class="balance">0</div>
+            <div id="balanceDisplay" class="amt">0</div>
         </div>
-        <div class="summary-item">
-            <span class="summary-label" data-i18n="acc-income">收入</span>
-            <div id="incomeDisplay" class="amount income-text">0</div>
+        <div class="acc-card income">
+            <span class="summary-label" data-i18n="acc-income">總收入</span>
+            <div id="incomeDisplay" class="amt">0</div>
         </div>
-        <div class="summary-item">
-            <span class="summary-label" data-i18n="acc-expense">支出</span>
-            <div id="expenseDisplay" class="amount expense-text">0</div>
+        <div class="acc-card expense">
+            <span class="summary-label" data-i18n="acc-expense">總支出</span>
+            <div id="expenseDisplay" class="amt">0</div>
         </div>
     </div>
 
@@ -55,37 +56,46 @@
         <div class="modal-content">
             <h3 data-i18n="acc-edit-title">修改帳務</h3>
             <div class="modal-buttons">
-                <button class="btn btn-success" onclick="updateRecord()" data-i18n="acc-save">儲存修改</button>
-                <button class="btn btn-danger" onclick="deleteCurrentRecord()" data-i18n="acc-delete">刪除此筆</button>
-                <button class="btn btn-secondary" onclick="closeModal()" data-i18n="acc-cancel">取消</button>
+                <button class="btn btn-success" onclick="updateRecord()">儲存修改</button>
+                <button class="btn btn-danger" onclick="deleteCurrentRecord()">刪除此筆</button>
+                <button class="btn btn-secondary" onclick="closeModal()">取消</button>
             </div>
         </div>
     </div>
 
     <div id="page-month" class="page">
-        <div class="filter-section">
-            <input type="month" id="monthFilter" onchange="render()" class="month-input">
-            <button class="btn btn-primary" onclick="generateFromTemplate()" data-i18n="acc-btn-tpl-gen">🚀 一鍵生成本月帳務</button>
+        <div class="filter-section" style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <input type="month" id="monthFilter" onchange="render()" class="month-input" style="flex: 1;">
+            <button class="btn btn-primary" onclick="generateFromTemplate()">🚀 生成本月範本</button>
         </div>
         <div id="monthList" class="records-list"></div>
     </div>
 
     <div id="page-day" class="page hidden">
         <div class="form-section">
-            <h3 data-i18n="acc-add-title">新增紀錄</h3>
+            <h3 data-i18n="acc-add-title">快速記帳</h3>
             <div class="form-group">
-                <label data-i18n="acc-category">分類：</label>
+                <label>項目名稱：</label>
+                <input type="text" id="itemInput" class="form-input" placeholder="例如: Uber 薪資">
+            </div>
+            <div class="form-group">
+                <label>金額：</label>
+                <input type="number" id="amountInput" class="form-input" placeholder="支出請用負數">
+            </div>
+            <div class="form-group">
+                <label>分類選擇：</label>
                 <select id="typeInput" class="form-input">
-                    <option value="臨時新增" data-i18n="cat-temp">臨時新增</option>
-                    <option value="外送薪水" data-i18n="cat-delivery">外送薪水</option>
-                    <option value="日薪" data-i18n="cat-daily">日薪</option>
-                    <option value="食物" data-i18n="cat-food">食物</option>
-                    <option value="交通" data-i18n="cat-trans">交通</option>
+                    <option value="臨時新增">臨時新增</option>
+                    <option value="外送薪水">外送薪水</option>
+                    <option value="工程收入">工程收入</option>
+                    <option value="食物支出">食物支出</option>
                 </select>
             </div>
-            <button class="btn btn-success" onclick="saveRecord()" data-i18n="acc-btn-add">✓ 確認加入</button>
+            <button class="btn btn-success" onclick="saveRecord()" style="width: 100%;">✓ 確認加入</button>
         </div>
     </div>
+
+</div>
 
 <script src="i18n.js"></script>
 <script src="script.js"></script>
