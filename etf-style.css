@@ -1,55 +1,58 @@
-/* etf-style.css - ETF 精算器專屬皮肉 */
+/* ETF 頁面專屬組件 (與 styles.css 互補) */
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.header-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid var(--border-primary);
-    margin-bottom: 20px;
-}
-
-/* 試算表專屬表格樣式 */
-#etfTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 15px 0;
-}
-
-#etfTable th, #etfTable td {
-    padding: 12px;
-    border: 1px solid var(--border-primary);
-    text-align: center;
-}
-
-/* 月份選擇方塊 (active 狀態) */
 .month-box {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 4px;
+    gap: 2px;
+    max-width: 200px;
+    margin: auto;
 }
 
 .month-item {
+    border: 1px solid var(--border-primary, #ccc);
+    font-size: 11px;
+    padding: 2px 0;
     cursor: pointer;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-primary);
+    background: #fff;
+    text-align: center;
 }
 
 .month-item.active {
-    background: #34a853; /* 綠色高亮 */
+    background-color: var(--text-accent, #2c3e50);
     color: white;
 }
 
-/* 底部總覽條 */
-.summary-bar {
-    position: sticky;
-    bottom: 0;
-    background: var(--bg-primary);
-    padding: 20px;
-    border-top: 2px solid var(--text-accent);
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    margin: 20px 0;
 }
+
+.month-card {
+    background: var(--bg-tertiary, #f8f9fa);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid var(--border-primary, #eee);
+}
+
+.month-card.reach {
+    background-color: #e8f8f5;
+    border-color: #2ecc71;
+}
+
+.m-title { font-size: 12px; color: #666; }
+.m-value { font-weight: bold; font-size: 1.2rem; margin-top: 5px; }
+
+.summary-bar {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: var(--text-accent, #2c3e50);
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    border-radius: 8px;
+}
+
+.highlight { color: #f1c40f; font-weight: bold; font-size: 1.3rem; }
