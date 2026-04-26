@@ -13,12 +13,12 @@
         .summary-card { background: white; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 15px; border: 2px solid #333; }
         .balance { font-size: 2.2rem; font-weight: bold; margin-top: 10px; }
         .form-group { background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px; }
-        input， select， button { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 1.1rem; box-sizing: border-box; }
+        input, select, button { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 1.1rem; box-sizing: border-box; }
         button { background: #333; color: white; border: none; font-weight: bold; cursor: pointer; }
         .record-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; margin-bottom: 8px; border-radius: 8px; border-left: 6px solid #333; }
         .income { background: var(--income-bg); border-color: var(--green-text); }
         .expense { background: var(--expense-bg); border-color: var(--red-text); }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0，0，0，0.6); z-index: 1000; justify-content: center; align-items: center; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; }
         .hidden { display: none; }
         .template-item { background: #eee; padding: 10px; margin-bottom: 8px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
@@ -42,11 +42,11 @@
 <div id="editModal" class="modal">
     <div class="modal-content">
         <h3>修改帳務</h3>
-        <input 输入="hidden" id="editId">
-        <label>日期：</label><input 输入="date" id="editDate">
-        <label>項目：</label><input 输入="text" id="editItem">
-        <label>金額：</label><input 输入="number" id="editAmount">
-        <label>備註：</label><input 输入="text" id="editNote">
+        <input type="hidden" id="editId">
+        <label>日期：</label><input type="date" id="editDate">
+        <label>項目：</label><input type="text" id="editItem">
+        <label>金額：</label><input type="number" id="editAmount">
+        <label>備註：</label><input type="text" id="editNote">
         <button onclick="updateRecord()" style="background: #28a745;">儲存修改</button>
         <button onclick="deleteCurrentRecord()" style="background: #dc3545;">刪除此筆</button>
         <button onclick="closeModal()" style="background: #999;">取消</button>
@@ -65,16 +65,16 @@
             <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
         </select>
         <label>日期 (1~31)：</label>
-        <input 输入="number" id="tplDay" value="1" min="1" max="31">
-        <input 输入="text" id="tplItem" placeholder="項目名稱">
-        <input 输入="number" id="tplAmount" placeholder="金額">
+        <input type="number" id="tplDay" value="1" min="1" max="31">
+        <input type="text" id="tplItem" placeholder="項目名稱">
+        <input type="number" id="tplAmount" placeholder="金額">
         <select id="tplType">
             <option value="預設支出">預設支出</option>
             <option value="外送薪水">外送薪水</option>
             <option value="股息收入">股息收入</option>
             <option value="稅務相關">稅務相關</option>
         </select>
-        <input 输入="text" id="tplNote" placeholder="備註">
+        <input type="text" id="tplNote" placeholder="備註">
         <button onclick="saveTemplate()" style="background: #28a745;">加入範本</button>
         <hr>
         <div id="templateList"></div>
@@ -84,22 +84,22 @@
 <div id="page-day" class="page hidden">
     <div class="form-group">
         <h3>新增紀錄</h3>
-        <input 输入="date" id="dateInput" style="height: 60px;">
-        <input 输入="text" id="itemInput" placeholder="項目名稱">
-        <input 输入="number" id="amountInput" placeholder="金額">
+        <input type="date" id="dateInput" style="height: 60px;">
+        <input type="text" id="itemInput" placeholder="項目名稱">
+        <input type="number" id="amountInput" placeholder="金額">
         <select id="typeInput">
             <option value="臨時新增">臨時新增</option>
             <option value="外送薪水">外送薪水</option>
             <option value="日薪">日薪</option>
         </select>
-        <input 输入="text" id="noteInput" placeholder="備註">
+        <input type="text" id="noteInput" placeholder="備註">
         <button onclick="saveRecord()">確認加入</button>
     </div>
 </div>
 
 <div id="page-month" class="page">
     <div style="background: #e9ecef; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: center;">
-        <input 输入="month" id="monthFilter" onchange="render()" style="width: 60%; margin: 0;">
+        <input type="month" id="monthFilter" onchange="render()" style="width: 60%; margin: 0;">
         <button onclick="generateFromTemplate()" style="background: #007bff; margin-top: 10px;">一鍵生成本月帳務</button>
     </div>
     <div id="monthList"></div>
@@ -116,11 +116,11 @@
 </div>
 
 <script>
-    let records = JSON。parse(localStorage。getItem('my_finances')) || [];
-    let templates = JSON。parse(localStorage。getItem('my_templates')) || [];
+    let records = JSON.parse(localStorage.getItem('my_finances')) || [];
+    let templates = JSON.parse(localStorage.getItem('my_templates')) || [];
 
     function renderTemplates() {
-        const list = document。getElementById('templateList');
+        const list = document.getElementById('templateList');
         list.innerHTML = '<h4>範本清單：</h4>';
         templates.forEach(t => {
             // 修正顯示邏輯：若欄位不存在，給予預設值防止顯示 NaN 或 undefined
@@ -134,29 +134,29 @@
     }
 
     function saveTemplate() {
-        const day = parseInt(document。getElementById('tplDay').value) || 1;
+        const day = parseInt(document.getElementById('tplDay').value) || 1;
         const tpl = {
-            id: Date。当前(),
-            month: document。getElementById('tplMonth').value，
+            id: Date.now(),
+            month: document.getElementById('tplMonth').value,
             day: day,
-            item: document。getElementById('tplItem').value || "未命名"，
-            amount: parseFloat(document。getElementById('tplAmount').value) || 0，
-            输入: document。getElementById('tplType').value，
-            note: document。getElementById('tplNote').value
+            item: document.getElementById('tplItem').value || "未命名",
+            amount: parseFloat(document.getElementById('tplAmount').value) || 0,
+            type: document.getElementById('tplType').value,
+            note: document.getElementById('tplNote').value
         };
         templates.push(tpl);
-        localStorage。setItem('my_templates'， JSON。stringify(templates));
+        localStorage.setItem('my_templates', JSON.stringify(templates));
         renderTemplates();
     }
 
     function deleteTemplate(id) {
         templates = templates.filter(t => t.id !== id);
-        localStorage。setItem('my_templates'， JSON。stringify(templates));
+        localStorage.setItem('my_templates', JSON.stringify(templates));
         renderTemplates();
     }
 
     function generateFromTemplate() {
-        const targetMonthVal = document。getElementById('monthFilter').value;
+        const targetMonthVal = document.getElementById('monthFilter').value;
         const currentM = targetMonthVal.split('-')[1];
         if(confirm(`確定要生成嗎？`)) {
             templates.forEach(t => {
@@ -164,11 +164,11 @@
                 const tDay = t.day || 1;
                 if(tMonth === 'all' || tMonth === currentM) {
                     records.push({
-                        id: Date。当前() + Math。random(),
-                        date: `${targetMonthVal}-${String(tDay).padStart(2， '0')}`，
-                        item: t.item，
-                        amount: t.amount，
-                        输入: t.输入，
+                        id: Date.now() + Math.random(),
+                        date: `${targetMonthVal}-${String(tDay).padStart(2, '0')}`,
+                        item: t.item,
+                        amount: t.amount,
+                        type: t.type,
                         note: t.note
                     });
                 }
@@ -178,67 +178,67 @@
     }
 
     // 通用邏輯
-    function sync() { localStorage。setItem('my_finances'， JSON。stringify(records)); }
-    function closeModal() { document。getElementById('editModal').style。display = 'none'; }
+    function sync() { localStorage.setItem('my_finances', JSON.stringify(records)); }
+    function closeModal() { document.getElementById('editModal').style.display = 'none'; }
     function saveRecord() {
-        const record = { id: Date。当前(), date: document。getElementById('dateInput').value， item: document。getElementById('itemInput').value， amount: parseFloat(document。getElementById('amountInput').value) || 0， 输入: document。getElementById('typeInput').value， note: document。getElementById('noteInput').value };
+        const record = { id: Date.now(), date: document.getElementById('dateInput').value, item: document.getElementById('itemInput').value, amount: parseFloat(document.getElementById('amountInput').value) || 0, type: document.getElementById('typeInput').value, note: document.getElementById('noteInput').value };
         records.push(record); sync(); showPage('month');
     }
     function openEdit(id) {
         const r = records.find(item => item.id === id);
-        document。getElementById('editId').value = r.id; document。getElementById('editDate').value = r.date;
-        document。getElementById('editItem').value = r.item; document。getElementById('editAmount').value = r.amount;
-        document。getElementById('editNote').value = r.note; document。getElementById('editModal').style。display = 'flex';
+        document.getElementById('editId').value = r.id; document.getElementById('editDate').value = r.date;
+        document.getElementById('editItem').value = r.item; document.getElementById('editAmount').value = r.amount;
+        document.getElementById('editNote').value = r.note; document.getElementById('editModal').style.display = 'flex';
     }
     function updateRecord() {
-        const id = parseFloat(document。getElementById('editId').value);
+        const id = parseFloat(document.getElementById('editId').value);
         const idx = records.findIndex(r => r.id === id);
-        records[idx].date = document。getElementById('editDate').value;
-        records[idx].item = document。getElementById('editItem').value;
-        records[idx].amount = parseFloat(document。getElementById('editAmount').value);
-        records[idx].note = document。getElementById('editNote').value;
+        records[idx].date = document.getElementById('editDate').value;
+        records[idx].item = document.getElementById('editItem').value;
+        records[idx].amount = parseFloat(document.getElementById('editAmount').value);
+        records[idx].note = document.getElementById('editNote').value;
         sync(); closeModal(); render();
     }
     function deleteCurrentRecord() {
-        const id = parseFloat(document。getElementById('editId').value);
+        const id = parseFloat(document.getElementById('editId').value);
         records = records.filter(r => r.id !== id); sync(); closeModal(); render();
     }
     function render() {
-        const list = document。getElementById('monthList');
-        const filter = document。getElementById('monthFilter').value;
+        const list = document.getElementById('monthList');
+        const filter = document.getElementById('monthFilter').value;
         let net = 0; list.innerHTML = '';
-        records.filter(r => r.date。startsWith(filter)).sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(r => {
+        records.filter(r => r.date.startsWith(filter)).sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(r => {
             net += r.amount;
-            const div = document。createElement('div');
+            const div = document.createElement('div');
             div.className = `record-item ${r.amount >= 0 ? 'income' : 'expense'}`;
             div.innerHTML = `<div><b>${r.date.slice(5)} ${r.item}</b><br><small>${r.amount} | ${r.note}</small></div>
                              <button onclick="openEdit(${r.id})" style="width:auto;padding:5px 10px;font-size:0.8rem;">修改</button>`;
             list.appendChild(div);
         });
-        document。getElementById('balanceDisplay').innerText = net.toLocaleString();
-        document。getElementById('balanceDisplay').style。color = net >= 0 ? 'green' : 'red';
+        document.getElementById('balanceDisplay').innerText = net.toLocaleString();
+        document.getElementById('balanceDisplay').style.color = net >= 0 ? 'green' : 'red';
     }
     function showPage(p) {
-        document。querySelectorAll('.page').forEach(el => el.classList。add('hidden'));
-        document。getElementById('page-' + p).classList。remove('hidden');
-        document。querySelectorAll('.tab').forEach(t => t.classList。remove('active'));
+        document.querySelectorAll('.page').forEach(el => el.classList.add('hidden'));
+        document.getElementById('page-' + p).classList.remove('hidden');
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         if(p==='year') renderYearly(); else if(p==='month') render(); else if(p==='template') renderTemplates();
     }
     function renderYearly() {
-        const tbody = document。getElementById('yearTableBody'); tbody.innerHTML = '';
-        const years = [...new Set(records.map(r => r.date。slice(0， 4)))];
-        const filter = document。getElementById('yearFilter');
+        const tbody = document.getElementById('yearTableBody'); tbody.innerHTML = '';
+        const years = [...new Set(records.map(r => r.date.slice(0, 4)))];
+        const filter = document.getElementById('yearFilter');
         if(filter.innerHTML==='') years.sort().reverse().forEach(y => filter.innerHTML += `<option value="${y}">${y}年</option>`);
         const selYear = filter.value || new Date().getFullYear();
         for(let i=12; i>=1; i--) {
-            const m = selYear + "-" + String(i).padStart(2， '0');
-            const mData = records.filter(r => r.date。startsWith(m)); if(mData.length === 0) continue;
-            const inc = mData.filter(r => r.amount > 0).reduce((a, b) => a + b.amount， 0);
-            const exp = mData.filter(r => r.amount < 0).reduce((a, b) => a + Math。abs(b.amount), 0);
+            const m = selYear + "-" + String(i).padStart(2, '0');
+            const mData = records.filter(r => r.date.startsWith(m)); if(mData.length === 0) continue;
+            const inc = mData.filter(r => r.amount > 0).reduce((a, b) => a + b.amount, 0);
+            const exp = mData.filter(r => r.amount < 0).reduce((a, b) => a + Math.abs(b.amount), 0);
             tbody.innerHTML += `<tr><td>${i}月</td><td>${inc}</td><td>${exp}</td><td><b>${inc-exp}</b></td></tr>`;
         }
     }
-    document。getElementById('monthFilter').value = new Date().toISOString().slice(0， 7);
+    document.getElementById('monthFilter').value = new Date().toISOString().slice(0, 7);
     render();
 </script>
 </body>
