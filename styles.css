@@ -162,7 +162,65 @@ body.sidebar-collapsed {
 }
 
 /* ==========================================================================
-   5. 響應式與細節
+   5. 側邊欄核心佈局 (修正色差與固定位置)
+   ========================================================================== */
+#sidebar {
+    position: fixed;           /* 強制固定在螢幕左側 */
+    left: 0;
+    top: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background-color: #2c3e50; /* ✅ 這就是你要的「色差」深色背景 */
+    color: white;
+    z-index: 1500;             /* 低於設定彈窗，但高於主內容 */
+    transition: width var(--transition-speed);
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 當側邊欄縮起時的寬度切換 */
+body.sidebar-collapsed #sidebar {
+    width: var(--sidebar-collapsed-width);
+}
+
+/* 側邊欄內的連結樣式 */
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    color: #ecf0f1;
+    text-decoration: none;
+    transition: background 0.2s;
+    white-space: nowrap;      /* 防止文字折行 */
+}
+
+.sidebar-link:hover {
+    background-color: #34495e; /* 滑過時的微色差 */
+}
+
+/* 側邊欄標題與頁尾 */
+.sidebar-section-title {
+    padding: 20px 20px 10px;
+    font-size: 0.85em;
+    color: #95a5a6;
+    text-transform: uppercase;
+}
+
+.sidebar-footer {
+    margin-top: auto;        /* 讓頁尾固定在底部 */
+    padding: 20px;
+    border-top: 1px solid #34495e;
+}
+
+/* 修正縮起時隱藏文字 */
+body.sidebar-collapsed .sidebar-link span,
+body.sidebar-collapsed .sidebar-section-title {
+    display: none;
+}
+
+/* ==========================================================================
+   6. 響應式與細節
    ========================================================================== */
 @media (max-width: 768px) {
     body, body.sidebar-collapsed {
