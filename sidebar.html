@@ -40,7 +40,7 @@
 
     <!-- 側邊欄底部 -->
     <div class="sidebar-footer">
-        <small data-i18n="sidebar-footer">©2026 妙奇少 AI協作生活網</small>
+        <small data-i18n="sidebar-footer">©2026 妙哉 AI協作生活網</small>
     </div>
 </div>
 
@@ -168,6 +168,34 @@
         padding: 10px 4px;
     }
 
+        /* 修正：摺疊後的按鈕排列 */
+    .sidebar.collapsed .sidebar-header {
+        flex-direction: column; /* 摺疊後按鈕改為垂直排列，避免擠壓消失 */
+        padding: 10px 5px;
+        align-items: center;
+    }
+    
+    .sidebar.collapsed .sidebar-header button {
+        flex: none; /* 取消彈性比例 */
+        width: 40px; /* 固定寬度，確保不會縮小到看不見 */
+        margin-bottom: 5px;
+    }
+    
+    /* 修正：側邊欄摺疊後的文字隱藏，防止撐開容器 */
+    .sidebar.collapsed .sidebar-section-title,
+    .sidebar.collapsed .sidebar-link span, /* 如果連結內有文字 */
+    .sidebar.collapsed .sidebar-footer {
+        display: none; 
+    }
+    
+    /* 修正：確保移動端點擊區域 */
+    @media (max-width: 480px) {
+        .sidebar.collapsed {
+            left: 0px !important; /* 確保摺疊時在手機上依然露出按鈕欄 */
+            width: 60px;
+        }
+    }
+
     /* 響應式設計 */
     @media (max-width: 768px) {
         .sidebar {
@@ -212,6 +240,10 @@
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         sidebar.classList.toggle('collapsed');
+        // 如果是手機版，點擊時也要處理 mobile-open 類別
+        if (window.innerWidth <= 480) {
+            sidebar.classList.toggle('mobile-open');
+        }
         document.body.classList.toggle('sidebar-collapsed');
         localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
     }
