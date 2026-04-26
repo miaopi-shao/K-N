@@ -5,11 +5,25 @@ function sync() {
     localStorage.setItem('my_finances', JSON.stringify(records));
 }
 
+// 修正後的頁面切換控管
 function showPage(p) {
+    // 1. 隱藏所有頁面
     document.querySelectorAll('.page').forEach(el => el.classList.add('hidden'));
+    
+    // 2. 顯示目標頁面 (確保 HTML id 存在，如 page-year, page-month)
     const targetPage = document.getElementById('page-' + p);
-    if (targetPage) targetPage.classList.remove('hidden');
-    if (p === 'month') render();
+    if (targetPage) {
+        targetPage.classList.remove('hidden');
+    }
+
+    // 3. 根據頁面執行對應渲染邏輯
+    if (p === 'year') {
+        renderYearly(); // 執行年總覽邏輯
+    } else if (p === 'month') {
+        render(); // 執行月明細邏輯
+    } else if (p === 'template') {
+        renderTemplates(); // 執行範本邏輯
+    }
 }
 
 function render() {
