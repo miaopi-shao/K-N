@@ -43,6 +43,7 @@
 .record-item.income { background-color: #dcfce7; border-left-color: #22c55e; }
 .record-item.expense { background-color: #fee2e2; border-left-color: #ef4444; }
 
+
 /* 3. 黑色修改按鈕 */
 .mod-btn {
     background: #333;
