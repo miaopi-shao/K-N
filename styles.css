@@ -1,8 +1,7 @@
 /* ==========================================================================
-   1. 全站核心主題變數 (CSS Variables)
+   1. 全站核心主題變數
    ========================================================================== */
 :root {
-    /* 基礎亮色主題 */
     --bg-primary: #f0f2f5;
     --bg-secondary: #ffffff;
     --bg-tertiary: #e8f0fe;
@@ -11,8 +10,8 @@
     --text-accent: #1a73e8;
     --border-primary: #dee2e6;
     --shadow-primary: rgba(0,0,0,0.1);
-    
-    /* 側邊欄專用 */
+    --shadow-secondary: rgba(0,0,0,0.15); /* 新增：彈窗用 */
+
     --sidebar-width: 220px;
     --sidebar-collapsed-width: 60px;
     --transition-speed: 0.3s;
@@ -28,10 +27,11 @@
     --text-accent: #64b5f6;
     --border-primary: #404040;
     --shadow-primary: rgba(0,0,0,0.3);
+    --shadow-secondary: rgba(0,0,0,0.5); /* 暗色模式加深陰影 */
 }
 
 /* ==========================================================================
-   2. 基礎佈局重設 (Base Reset) - 解決「紅叉」與「位移」的核心
+   2. 基礎佈局重設
    ========================================================================== */
 * {
     margin: 0;
@@ -41,22 +41,20 @@
 
 body {
     font-family: "Microsoft JhengHei", sans-serif;
+    font-size: var(--base-font-size); /* 連動設定功能 */
     background-color: var(--bg-primary);
     color: var(--text-primary);
     line-height: 1.5;
     transition: background-color var(--transition-speed), padding var(--transition-speed);
-    
-    /* 重要：預留側邊欄空間，預設展開 */
     padding-left: var(--sidebar-width); 
 }
 
-/* 當側邊欄縮小時，Body 的內距自動調整 */
 body.sidebar-collapsed {
     padding-left: var(--sidebar-collapsed-width);
 }
 
 /* ==========================================================================
-   3. 通用元件樣式 (全站一致性)
+   3. 通用元件樣式
    ========================================================================== */
 .container {
     max-width: 1100px;
@@ -67,12 +65,11 @@ body.sidebar-collapsed {
     box-shadow: 0 4px 15px var(--shadow-primary);
 }
 
-/* 主題切換按鈕 (固定在右上角) */
 .theme-toggle {
     position: fixed;
     top: 20px;
     right: 20px;
-    z-index: 1001; /* 確保在側邊欄之上 */
+    z-index: 1001;
     background: var(--bg-secondary);
     border: 2px solid var(--border-primary);
     border-radius: 50%;
@@ -86,158 +83,90 @@ body.sidebar-collapsed {
 }
 
 /* ==========================================================================
-   4. 響應式設計 (RWD) - 解決各尺寸螢幕與手機端的顯示
+   4. 設定彈窗 (Settings Modal) - 邏輯修正
+   ========================================================================== */
+.settings-modal {
+    display: none; /* 預設隱藏 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* 稍微加深遮罩 */
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.settings-modal.active {
+    display: flex; /* 開啟時顯示 */
+}
+
+.settings-modal-content {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px var(--shadow-secondary);
+    width: 90%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.settings-header h2 {
+    margin: 0;
+    color: var(--text-accent);
+    font-size: 1.3em;
+}
+
+.settings-body {
+    padding: 20px;
+}
+
+.settings-group {
+    margin-bottom: 20px;
+}
+
+.settings-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.settings-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.settings-btn {
+    padding: 10px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: 6px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.settings-btn:hover, .settings-btn.active {
+    background: var(--text-accent);
+    color: white;
+}
+
+/* ==========================================================================
+   5. 響應式與細節
    ========================================================================== */
 @media (max-width: 768px) {
     body, body.sidebar-collapsed {
-        padding-left: 0; /* 手機端側邊欄通常隱藏或覆蓋 */
+        padding-left: 0;
     }
-
-    .container {
-        margin: 10px;
-        padding: 15px;
-    }
-    
-    /* 這裡可以補上手機版側邊欄的特定樣式 */
+    .container { margin: 10px; }
 }
-
-/* 設置鈕的邏輯功能 */
-settings-modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 2000;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .settings-modal.active {
-        display: flex;
-    }
-    
-    .settings-modal-content {
-        background: var(--bg-secondary);
-        border-radius: 12px;
-        box-shadow: 0 8px 24px var(--shadow-secondary);
-        width: 90%;
-        max-width: 400px;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .settings-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 20px;
-        border-bottom: 1px solid var(--border-primary);
-    }
-    
-    .settings-header h2 {
-        margin: 0;
-        color: var(--text-accent);
-        font-size: 1.3em;
-    }
-    
-    .settings-close-btn {
-        background: none;
-        border: none;
-        font-size: 24px;
-        cursor: pointer;
-        color: var(--text-secondary);
-        transition: color 0.3s ease;
-    }
-    
-    .settings-close-btn:hover {
-        color: var(--text-primary);
-    }
-    
-    .settings-body {
-        padding: 20px;
-        flex: 1;
-        overflow-y: auto;
-    }
-    
-    .settings-group {
-        margin-bottom: 25px;
-    }
-    
-    .settings-group:last-child {
-        margin-bottom: 0;
-    }
-    
-    .settings-group label {
-        display: block;
-        margin-bottom: 10px;
-        font-weight: bold;
-        color: var(--text-primary);
-    }
-    
-    .settings-options {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-    }
-    
-    .settings-btn {
-        padding: 10px 12px;
-        background: var(--bg-tertiary);
-        border: 2px solid transparent;
-        border-radius: 6px;
-        color: var(--text-primary);
-        cursor: pointer;
-        font-size: 0.9em;
-        transition: all 0.3s ease;
-        font-weight: 500;
-    }
-    
-    .settings-btn:hover {
-        background: var(--text-accent);
-        color: white;
-        border-color: var(--text-accent);
-    }
-    
-    .settings-btn.active {
-        background: var(--text-accent);
-        color: white;
-        border-color: var(--text-accent);
-    }
-    
-    .settings-footer {
-        padding: 15px 20px;
-        border-top: 1px solid var(--border-primary);
-        display: flex;
-        gap: 10px;
-    }
-    
-    .settings-close-final {
-        flex: 1;
-        padding: 12px;
-        background: var(--text-accent);
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: all 0.3s ease;
-    }
-    
-    .settings-close-final:hover {
-        opacity: 0.9;
-    }
-    
-    @media (max-width: 480px) {
-        .settings-modal-content {
-            width: 95%;
-            max-width: none;
-        }
-        
-        .settings-options {
-            grid-template-columns: 1fr;
-        }
-    }
