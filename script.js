@@ -1,18 +1,19 @@
 // script.js - 全站核心控管 (主題 + 側邊欄 + 設定 + 字體)
+// script.js - 全站核心控管 (修正對接版)
 
-// 1. 初始化與啟動 (確保載入時沒紅叉)
 document.addEventListener('DOMContentLoaded', () => {
-    initTheme();       // 載入亮暗色
-    initFontSize();    // 載入字體大小
-    loadCoreModules(); // 載入側邊欄與設定彈窗
+    // 💡 1. 優先載入字體與語言 (i18n.js 負責)
+    if (typeof initI18n === 'function') initI18n(); 
+
+    initTheme();       // 載入亮暗色主題
+    loadCoreModules(); // 載入外部組件 (側邊欄與設定)
 });
 
-// 2. 主題控管 (亮色/暗色切換)
+// 2. 主題控管 (修正：考慮非同步載入按鈕的情況)
 function initTheme() {
     const theme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', theme);
-    const btn = document.getElementById('themeToggle');
-    if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
+    // 這裡不直接改 icon，改在 loadCoreModules 成功後再改
 }
 
 function toggleTheme() {
@@ -20,50 +21,45 @@ function toggleTheme() {
     const target = current === 'light' ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', target);
     localStorage.setItem('theme', target);
+    updateThemeIcon(target);
+}
+
+function updateThemeIcon(theme) {
     const btn = document.getElementById('themeToggle');
-    if (btn) btn.textContent = target === 'light' ? '🌙' : '☀️';
+    if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀️';
 }
 
-// 3. 字體大小控管 (設定功能)
-function initFontSize() {
-    const savedSize = localStorage.getItem('userFontSize') || 'normal';
-    setFontSize(savedSize);
-}
-
-function setFontSize(size) {
-    const root = document.documentElement;
-    let pixelSize = '16px';
-    switch(size) {
-        case 'small': pixelSize = '14px'; break;
-        case 'normal': pixelSize = '16px'; break;
-        case 'large': pixelSize = '18px'; break;
-        case 'xlarge': pixelSize = '20px'; break;
+// 3. 字體大小控管 (⚠️ 報廢，改由呼叫 i18n.js 的方法)
+function changeFontSize(size) {
+    if (typeof setFontSize === 'function') { // 呼叫 i18n.js 裡的 setFontSize
+        setFontSize(size);
+        updateSettingsButtonStates(); 
     }
-    root.style.setProperty('--base-font-size', pixelSize);
-    localStorage.setItem('userFontSize', size);
-    updateSettingsButtonStates(); 
 }
 
-// 4. 模組加載 (側邊欄 + 設定彈窗的外部載入)
+// 4. 模組加載 (修正：加入翻譯對接)
 function loadCoreModules() {
-    // 🏠 側邊欄載入區
     const sidebarContainer = document.getElementById('sidebarContainer');
     if (sidebarContainer) {
         fetch('sidebar.html')
             .then(res => res.text())
             .then(html => {
                 sidebarContainer.innerHTML = html;
-                syncSidebarState();
-                markActivePage();
+                
+                // 💡 關鍵對接：側邊欄出來後立刻做三件事
+                if (typeof applyTranslations === 'function') applyTranslations(); // 1. 翻譯
+                updateThemeIcon(localStorage.getItem('theme') || 'light');        // 2. 顯示正確主題圖示
+                syncSidebarState();                                              // 3. 同步縮放狀態
+                markActivePage();                                                // 4. 高亮當前頁
             });
     }
 
-    // ⚙️ 設定彈窗注入區 (防止其他頁面漏掉)
     if (!document.getElementById('settingsModal')) {
         fetch('settings-modal.html')
             .then(res => res.text())
             .then(html => {
                 document.body.insertAdjacentHTML('beforeend', html);
+                if (typeof applyTranslations === 'function') applyTranslations(); // 翻譯設定彈窗
             });
     }
 }
@@ -108,9 +104,9 @@ function goHome() {
     window.location.href = 'index.html'; 
 }
 
-// 8. 設定頁面內的高亮邏輯 (確保按鈕顯示正確狀態)
+// 8. 設定按鈕高亮 (修正：對齊 i18n.js 的變數名稱)
 function updateSettingsButtonStates() {
-    const currentSize = localStorage.getItem('userFontSize') || 'normal';
+    const currentSize = localStorage.getItem('fontSize') || 'normal'; // 注意：i18n.js 用的是 'fontSize'
     document.querySelectorAll('.settings-btn').forEach(btn => {
         btn.classList.remove('active');
         const clickAttr = btn.getAttribute('onclick') || '';
@@ -126,10 +122,12 @@ window.addEventListener('click', (e) => {
     if (e.target === modal) closeSettings();
 });
 
-// 10. 頁面選中提示 (Sidebar 連結高亮)
+// 10. 頁面選中提示 (修正：ETF 檔案更名)
 function markActivePage() {
-    const page = window.location.pathname.split('/').pop() || 'index.html';
+    let page = window.location.pathname.split('/').pop() || 'index.html';
+    // ⚠️ 特殊處理：如果抓到是 index.html，確保它對應側邊欄的連結
     document.querySelectorAll('.sidebar-link').forEach(link => {
-        if (link.getAttribute('href') === page) link.classList.add('active');
+        const href = link.getAttribute('href');
+        if (href === page) link.classList.add('active');
     });
 }
