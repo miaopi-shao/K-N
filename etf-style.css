@@ -1,0 +1,55 @@
+/* etf-style.css - ETF 精算器專屬皮肉 */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--border-primary);
+    margin-bottom: 20px;
+}
+
+/* 試算表專屬表格樣式 */
+#etfTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+#etfTable th, #etfTable td {
+    padding: 12px;
+    border: 1px solid var(--border-primary);
+    text-align: center;
+}
+
+/* 月份選擇方塊 (active 狀態) */
+.month-box {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+}
+
+.month-item {
+    cursor: pointer;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+}
+
+.month-item.active {
+    background: #34a853; /* 綠色高亮 */
+    color: white;
+}
+
+/* 底部總覽條 */
+.summary-bar {
+    position: sticky;
+    bottom: 0;
+    background: var(--bg-primary);
+    padding: 20px;
+    border-top: 2px solid var(--text-accent);
+}
