@@ -2,46 +2,45 @@
 <div class="sidebar" id="sidebar">
     <!-- 主頁按鈕 -->
     <div class="sidebar-header">
-        <button class="sidebar-home-btn" onclick="goHome()" title="回到首頁">🏠</button>
+        <button class="sidebar-home-btn" onclick="goHome()" title="回到主頁">🏠</button>
         <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="摺疊/展開">☰</button>
+        <button class="sidebar-settings-btn" onclick="openSettings()" title="系統設定">⚙️</button>
     </div>
 
     <!-- 部分一：內部功能 -->
     <div class="sidebar-section">
-        <div class="sidebar-section-title">🔧 內部功能</div>
+        <div class="sidebar-section-title" data-i18n="sidebar-internal">🔧 內部功能</div>
         <div class="sidebar-links">
-            <a href="index.html" class="sidebar-link" onclick="setActiveLink(event)">📊 ETF 月月配試算</a>
-            <a href="accounting.html" class="sidebar-link" onclick="setActiveLink(event)">💰 記帳系統</a>
-            <a href="car.html" class="sidebar-link" onclick="setActiveLink(event)">🚗 車輛管理</a>
+            <a href="index.html" class="sidebar-link" onclick="setActiveLink(event)" data-i18n="sidebar-etf">📊 ETF 月月配試算</a>
+            <a href="accounting.html" class="sidebar-link" onclick="setActiveLink(event)" data-i18n="sidebar-accounting">💰 記帳系統</a>
+            <a href="car.html" class="sidebar-link" onclick="setActiveLink(event)" data-i18n="sidebar-car">🚗 車輛管理</a>
         </div>
     </div>
 
     <!-- 部分二：其他專案 -->
     <div class="sidebar-section">
-        <div class="sidebar-section-title">📁 其他專案</div>
+        <div class="sidebar-section-title" data-i18n="sidebar-projects">📁 其他專案</div>
         <div class="sidebar-links">
             <a href="#" class="sidebar-link" data-url="">待新增專案 1</a>
             <a href="#" class="sidebar-link" data-url="">待新增專案 2</a>
-            <!-- 可編輯區域：在此添加其他專案的URL -->
         </div>
     </div>
 
     <!-- 部分三：好網站 -->
     <div class="sidebar-section">
-        <div class="sidebar-section-title">🌟 好網站</div>
+        <div class="sidebar-section-title" data-i18n="sidebar-websites">🌟 好網站</div>
         <div class="sidebar-links">
             <a href="https://www.google.com" target="_blank" class="sidebar-link">Google</a>
             <a href="https://www.github.com" target="_blank" class="sidebar-link">GitHub</a>
             <a href="https://www.youtube.com" target="_blank" class="sidebar-link">YouTube</a>
             <a href="https://www.wikipedia.org" target="_blank" class="sidebar-link">Wikipedia</a>
             <a href="https://stackoverflow.com" target="_blank" class="sidebar-link">Stack Overflow</a>
-            <!-- 可編輯區域：在此添加更多好網站 -->
         </div>
     </div>
 
     <!-- 側邊欄底部 -->
     <div class="sidebar-footer">
-        <small>©2026 妙奇少 AI協作生活網</small>
+        <small data-i18n="sidebar-footer">©2026 妙奇少 AI協作生活網</small>
     </div>
 </div>
 
@@ -69,18 +68,19 @@
     .sidebar-header {
         padding: 15px;
         display: flex;
-        gap: 10px;
+        gap: 8px;
         border-bottom: 1px solid var(--border-primary);
         flex-shrink: 0;
     }
 
     .sidebar-home-btn,
-    .sidebar-toggle-btn {
+    .sidebar-toggle-btn,
+    .sidebar-settings-btn {
         background: var(--btn-primary);
         color: white;
         border: none;
         border-radius: 6px;
-        padding: 8px 12px;
+        padding: 8px 10px;
         cursor: pointer;
         font-size: 1.1em;
         transition: all 0.3s ease;
@@ -88,7 +88,8 @@
     }
 
     .sidebar-home-btn:hover,
-    .sidebar-toggle-btn:hover {
+    .sidebar-toggle-btn:hover,
+    .sidebar-settings-btn:hover {
         opacity: 0.9;
         transform: translateY(-2px);
     }

@@ -1,0 +1,227 @@
+<!-- 設定彈窗 -->
+<div id="settingsModal" class="settings-modal">
+    <div class="settings-modal-content">
+        <div class="settings-header">
+            <h2 data-i18n="settings-title">⚙️ 系統設定</h2>
+            <button class="settings-close-btn" onclick="closeSettings()">✕</button>
+        </div>
+        
+        <div class="settings-body">
+            <!-- 語言設定 -->
+            <div class="settings-group">
+                <label data-i18n="settings-language">語言</label>
+                <div class="settings-options">
+                    <button class="settings-btn" onclick="setLanguage('zh-TW')">中文 (台灣)</button>
+                    <button class="settings-btn" onclick="setLanguage('en')">English</button>
+                    <button class="settings-btn" onclick="setLanguage('ja')">日本語</button>
+                    <button class="settings-btn" onclick="setLanguage('ko')">한국어</button>
+                </div>
+            </div>
+            
+            <!-- 字體大小設定 -->
+            <div class="settings-group">
+                <label data-i18n="settings-font-size">字體大小</label>
+                <div class="settings-options">
+                    <button class="settings-btn" onclick="setFontSize('small')" data-i18n="font-small">小</button>
+                    <button class="settings-btn" onclick="setFontSize('normal')" data-i18n="font-normal">正常</button>
+                    <button class="settings-btn" onclick="setFontSize('large')" data-i18n="font-large">大</button>
+                    <button class="settings-btn" onclick="setFontSize('xlarge')" data-i18n="font-xlarge">超大</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="settings-footer">
+            <button class="settings-close-final" onclick="closeSettings()" data-i18n="settings-close">關閉</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .settings-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .settings-modal.active {
+        display: flex;
+    }
+    
+    .settings-modal-content {
+        background: var(--bg-secondary);
+        border-radius: 12px;
+        box-shadow: 0 8px 24px var(--shadow-secondary);
+        width: 90%;
+        max-width: 400px;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .settings-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid var(--border-primary);
+    }
+    
+    .settings-header h2 {
+        margin: 0;
+        color: var(--text-accent);
+        font-size: 1.3em;
+    }
+    
+    .settings-close-btn {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--text-secondary);
+        transition: color 0.3s ease;
+    }
+    
+    .settings-close-btn:hover {
+        color: var(--text-primary);
+    }
+    
+    .settings-body {
+        padding: 20px;
+        flex: 1;
+        overflow-y: auto;
+    }
+    
+    .settings-group {
+        margin-bottom: 25px;
+    }
+    
+    .settings-group:last-child {
+        margin-bottom: 0;
+    }
+    
+    .settings-group label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+        color: var(--text-primary);
+    }
+    
+    .settings-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    
+    .settings-btn {
+        padding: 10px 12px;
+        background: var(--bg-tertiary);
+        border: 2px solid transparent;
+        border-radius: 6px;
+        color: var(--text-primary);
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+    
+    .settings-btn:hover {
+        background: var(--text-accent);
+        color: white;
+        border-color: var(--text-accent);
+    }
+    
+    .settings-btn.active {
+        background: var(--text-accent);
+        color: white;
+        border-color: var(--text-accent);
+    }
+    
+    .settings-footer {
+        padding: 15px 20px;
+        border-top: 1px solid var(--border-primary);
+        display: flex;
+        gap: 10px;
+    }
+    
+    .settings-close-final {
+        flex: 1;
+        padding: 12px;
+        background: var(--text-accent);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    
+    .settings-close-final:hover {
+        opacity: 0.9;
+    }
+    
+    @media (max-width: 480px) {
+        .settings-modal-content {
+            width: 95%;
+            max-width: none;
+        }
+        
+        .settings-options {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    function openSettings() {
+        const modal = document.getElementById('settingsModal');
+        if (modal) {
+            modal.classList.add('active');
+            // 更新按鈕狀態
+            updateSettingsButtonStates();
+        }
+    }
+    
+    function closeSettings() {
+        const modal = document.getElementById('settingsModal');
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    }
+    
+    function updateSettingsButtonStates() {
+        const currentLang = getCurrentLanguage();
+        const currentSize = getFontSize();
+        
+        document.querySelectorAll('.settings-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // 設置活躍語言按鈕
+        document.querySelectorAll('.settings-btn').forEach(btn => {
+            if (btn.textContent.includes('中文') && currentLang === 'zh-TW') btn.classList.add('active');
+            if (btn.textContent.includes('English') && currentLang === 'en') btn.classList.add('active');
+            if (btn.textContent.includes('日本語') && currentLang === 'ja') btn.classList.add('active');
+            if (btn.textContent.includes('한국어') && currentLang === 'ko') btn.classList.add('active');
+            
+            if (btn.getAttribute('onclick')?.includes('small') && currentSize === 'small') btn.classList.add('active');
+            if (btn.getAttribute('onclick')?.includes('normal') && currentSize === 'normal') btn.classList.add('active');
+            if (btn.getAttribute('onclick')?.includes('large') && currentSize === 'large') btn.classList.add('active');
+            if (btn.getAttribute('onclick')?.includes('xlarge') && currentSize === 'xlarge') btn.classList.add('active');
+        });
+    }
+    
+    // 點擊彈窗外面關閉
+    window.addEventListener('click', (e) => {
+        const modal = document.getElementById('settingsModal');
+        if (modal && e.target === modal) {
+            closeSettings();
+        }
+    });
+</script>
