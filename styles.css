@@ -100,3 +100,144 @@ body.sidebar-collapsed {
     
     /* 這裡可以補上手機版側邊欄的特定樣式 */
 }
+
+/* 設置鈕的邏輯功能 */
+settings-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .settings-modal.active {
+        display: flex;
+    }
+    
+    .settings-modal-content {
+        background: var(--bg-secondary);
+        border-radius: 12px;
+        box-shadow: 0 8px 24px var(--shadow-secondary);
+        width: 90%;
+        max-width: 400px;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .settings-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid var(--border-primary);
+    }
+    
+    .settings-header h2 {
+        margin: 0;
+        color: var(--text-accent);
+        font-size: 1.3em;
+    }
+    
+    .settings-close-btn {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--text-secondary);
+        transition: color 0.3s ease;
+    }
+    
+    .settings-close-btn:hover {
+        color: var(--text-primary);
+    }
+    
+    .settings-body {
+        padding: 20px;
+        flex: 1;
+        overflow-y: auto;
+    }
+    
+    .settings-group {
+        margin-bottom: 25px;
+    }
+    
+    .settings-group:last-child {
+        margin-bottom: 0;
+    }
+    
+    .settings-group label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+        color: var(--text-primary);
+    }
+    
+    .settings-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    
+    .settings-btn {
+        padding: 10px 12px;
+        background: var(--bg-tertiary);
+        border: 2px solid transparent;
+        border-radius: 6px;
+        color: var(--text-primary);
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+    
+    .settings-btn:hover {
+        background: var(--text-accent);
+        color: white;
+        border-color: var(--text-accent);
+    }
+    
+    .settings-btn.active {
+        background: var(--text-accent);
+        color: white;
+        border-color: var(--text-accent);
+    }
+    
+    .settings-footer {
+        padding: 15px 20px;
+        border-top: 1px solid var(--border-primary);
+        display: flex;
+        gap: 10px;
+    }
+    
+    .settings-close-final {
+        flex: 1;
+        padding: 12px;
+        background: var(--text-accent);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    
+    .settings-close-final:hover {
+        opacity: 0.9;
+    }
+    
+    @media (max-width: 480px) {
+        .settings-modal-content {
+            width: 95%;
+            max-width: none;
+        }
+        
+        .settings-options {
+            grid-template-columns: 1fr;
+        }
+    }
