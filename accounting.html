@@ -13,50 +13,79 @@
 
 <div class="container">
     <div class="header-section">
-        <h2 data-i18n="etf-title">ETF 月月配組合領息試算</h2>
-        <div class="version-info">版本: 1.4 (Structure Standardized)</div>
-    </div>
-    
-    <div class="config-section">
-        <label data-i18n="etf-target-income">每月目標領息金額：</label>
-        <input type="number" id="targetIncome" value="40000" style="width: 120px;" oninput="calculate()"> 元
-        <span style="margin-left: 15px;" data-i18n="etf-target-note">(目標是讓 1~12 月每個月都盡量達到此金額)</span>
+        <h2 data-i18n="acc-header">💰 記帳系統</h2>
+        <div class="version-info">版本: 1.1 (Standardized)</div>
     </div>
 
-    <div style="margin-bottom: 15px; display: flex; gap: 10px;">
-        <button class="btn btn-add" onclick="addRow()" data-i18n="etf-add">+ 新增 ETF 標的</button>
-        <button class="btn btn-add" style="background-color: #34a853;" onclick="saveBackup()" data-i18n="etf-backup">💾 保存備份</button>
+    <div class="tab-container">
+        <div class="tab-item" onclick="showPage('month')">
+            <span class="tab-icon">📅</span>
+            <span data-i18n="acc-tab-month">月明細</span>
+        </div>
+        <div class="tab-item" onclick="showPage('day')">
+            <span class="tab-icon">📝</span>
+            <span data-i18n="acc-tab-add">新增記錄</span>
+        </div>
+        <div class="tab-item" onclick="showPage('year')">
+            <span class="tab-icon">📊</span>
+            <span data-i18n="acc-tab-year">年統計</span>
+        </div>
+        <div class="tab-item" onclick="showPage('template')">
+            <span class="tab-icon">🎯</span>
+            <span data-i18n="acc-tab-tpl">範本設定</span>
+        </div>
     </div>
 
-    <details style="margin-bottom: 20px; padding: 15px; background: var(--bg-tertiary); border-radius: 8px; border: 1px solid var(--border-primary);">
-        <summary style="cursor: pointer; font-weight: bold; color: var(--text-accent);" data-i18n="etf-my-backup">📋 我的備份 (點擊展開)</summary>
-        <div id="backupList" style="margin-top: 15px;"></div>
-    </details>
-
-    <table id="etfTable">
-        <thead>
-            <tr>
-                <th width="15%" data-i18n="etf-name">ETF 名稱</th>
-                <th width="12%" data-i18n="etf-dividend">單次配息(元/張)</th>
-                <th width="12%" data-i18n="etf-price">參考股價(元)</th>
-                <th width="25%" data-i18n="etf-months">配息月份 (點選切換)</th>
-                <th width="12%" data-i18n="etf-shares">需持有張數</th>
-                <th width="12%" data-i18n="etf-cost">投入本金</th>
-                <th width="10%" data-i18n="etf-operation">操作</th>
-            </tr>
-        </thead>
-        <tbody>
-            </tbody>
-    </table>
-
-    <h3 data-i18n="etf-summary">每月領息總覽</h3>
-    <div class="result-grid" id="monthGrid"></div>
-
-    <div class="summary-bar">
-        <div><span data-i18n="etf-total-capital">預估總投入本金：</span><span id="totalCapital" class="highlight">0</span> 萬元</div>
-        <div><span data-i18n="etf-avg-monthly">平均月領金額：</span><span id="avgMonthly" class="highlight">0</span> 元</div>
+    <div class="summary-card">
+        <div class="summary-item">
+            <span class="summary-label" data-i18n="acc-balance">本期盈餘</span>
+            <div id="balanceDisplay" class="balance">0</div>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label" data-i18n="acc-income">收入</span>
+            <div id="incomeDisplay" class="amount income-text">0</div>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label" data-i18n="acc-expense">支出</span>
+            <div id="expenseDisplay" class="amount expense-text">0</div>
+        </div>
     </div>
-</div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3 data-i18n="acc-edit-title">修改帳務</h3>
+            <div class="modal-buttons">
+                <button class="btn btn-success" onclick="updateRecord()" data-i18n="acc-save">儲存修改</button>
+                <button class="btn btn-danger" onclick="deleteCurrentRecord()" data-i18n="acc-delete">刪除此筆</button>
+                <button class="btn btn-secondary" onclick="closeModal()" data-i18n="acc-cancel">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-month" class="page">
+        <div class="filter-section">
+            <input type="month" id="monthFilter" onchange="render()" class="month-input">
+            <button class="btn btn-primary" onclick="generateFromTemplate()" data-i18n="acc-btn-tpl-gen">🚀 一鍵生成本月帳務</button>
+        </div>
+        <div id="monthList" class="records-list"></div>
+    </div>
+
+    <div id="page-day" class="page hidden">
+        <div class="form-section">
+            <h3 data-i18n="acc-add-title">新增紀錄</h3>
+            <div class="form-group">
+                <label data-i18n="acc-category">分類：</label>
+                <select id="typeInput" class="form-input">
+                    <option value="臨時新增" data-i18n="cat-temp">臨時新增</option>
+                    <option value="外送薪水" data-i18n="cat-delivery">外送薪水</option>
+                    <option value="日薪" data-i18n="cat-daily">日薪</option>
+                    <option value="食物" data-i18n="cat-food">食物</option>
+                    <option value="交通" data-i18n="cat-trans">交通</option>
+                </select>
+            </div>
+            <button class="btn btn-success" onclick="saveRecord()" data-i18n="acc-btn-add">✓ 確認加入</button>
+        </div>
+    </div>
 
 <script src="i18n.js"></script>
 <script src="script.js"></script>
