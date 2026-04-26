@@ -1,28 +1,22 @@
 /* ==========================================================================
-   側邊欄對接修正 (與全站 styles.css 保持一致)
+   側邊欄與全站對接 (保持 1.4 版基礎骨架)
    ========================================================================== */
 body {
     font-family: "Microsoft JhengHei", sans-serif;
     background-color: var(--bg-primary);
     color: var(--text-primary);
-    /* ❌ 刪除原本的 margin-left: 220px; */
-    /* ✅ 改用變數連動 */
     padding-left: var(--sidebar-width); 
     transition: padding-left 0.3s ease;
 }
 
-/* 側邊欄縮起時，主內容區域自動填滿 */
 body.sidebar-collapsed {
     padding-left: var(--sidebar-collapsed-width);
 }
 
-/* ❌ 這裡原本的 .sidebar 區塊建議直接刪除，交給 styles.css 控制 */
-/* 如果要留，請確保背景色不要寫死成白色 */
 .sidebar {
     background-color: #2c3e50 !important; /* 強制執行深色色差 */
 }
 
-/* 1.4 版核心變數適配 (若 styles.css 已有則會自動覆蓋) */
 .container {
     max-width: 1100px;
     margin: auto;
@@ -32,8 +26,48 @@ body.sidebar-collapsed {
     box-shadow: 0 4px 15px var(--shadow-primary);
 }
 
-/* 1.4 版表格微調 */
-#etfTable {
+/* ==========================================================================
+   記帳管理模組 (比對後刪除 ETF 月份選擇器，僅保留表格與統計邏輯)
+   ========================================================================== */
+
+/* ❌ 刪除原本分散的統計塊，改用 1.4 版核心卡片佈局呈現收支 */
+.account-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.acc-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-secondary);
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 10px var(--shadow-primary);
+}
+
+/* ✅ 1.4 版靈魂：狀態色彩連動 (收入/支出/結餘) */
+.acc-card.income .amt {
+    color: var(--text-success); /* 達標綠 */
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.acc-card.expense .amt {
+    color: var(--text-error);   /* 未達標紅 */
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.acc-card.profit .amt {
+    color: #fbbc04;             /* 1.4 版結餘黃 */
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+/* ✅ 記帳表格對齊 (將 #etfTable 修改為 #accountTable) */
+#accountTable {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
@@ -41,72 +75,24 @@ body.sidebar-collapsed {
     font-size: 0.9em;
 }
 
-#etfTable th {
+#accountTable th {
     background-color: var(--table-header);
     color: white;
     padding: 12px;
 }
 
-#etfTable td {
+#accountTable td {
     border: 1px solid var(--border-primary);
     padding: 10px;
 }
 
-/* 1.4 版靈魂：月份選擇器 */
-.month-box {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 3px;
-}
+/* ❌ 刪除原本 1.4 版 ETF 月份選擇器 (.month-box, .month-item) */
+/* ❌ 刪除原本 1.4 版 ETF 結果網格 (.result-grid, .month-card) */
 
-.month-item {
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-primary);
-    padding: 6px 2px;
-    cursor: pointer;
-    border-radius: 4px;
-    text-align: center;
-    transition: all 0.2s ease;
-    color: var(--text-primary);
-}
-
-.month-item.active {
-    background: var(--text-success);
-    color: white;
-    border-color: #2d8e47;
-}
-
-/* 月份總覽卡片 */
-.result-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 12px;
-    margin-top: 20px;
-}
-
-.month-card {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-secondary);
-    padding: 12px;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 2px 4px var(--shadow-primary);
-}
-
-.month-card.low-income {
-    background-color: var(--low-income-bg);
-    border-color: var(--low-income-border);
-}
-
-.month-card .amt {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: var(--text-error);
-}
-
+/* ✅ 保留 1.4 版底部總覽條風格 */
 .summary-bar {
     background: var(--bg-accent);
-    color: #87ceeb; /* 1.4 版藍色 */
+    color: #87ceeb; 
     padding: 20px;
     border-radius: 8px;
     margin-top: 20px;
