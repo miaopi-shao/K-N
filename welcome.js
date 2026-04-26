@@ -43,14 +43,14 @@ function createParticles() {
     }
 }
 
-// 進入主頁
+// 進入首頁（通過歡迎頁導向）
 function enterMain() {
     const container = document.querySelector('.welcome-container');
     container.classList.add('entering');
     
     // 延遲進入以顯示動畫
     setTimeout(() => {
-        window.location.href = 'index.html';
+        window.location.href = 'home.html';
     }, 800);
 }
 

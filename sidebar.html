@@ -2,7 +2,7 @@
 <div class="sidebar" id="sidebar">
     <!-- 主頁按鈕 -->
     <div class="sidebar-header">
-        <button href="welcome.html" class="sidebar-home-btn" onclick="goHome()" title="回到主頁">🏠</button>
+        <button class="sidebar-home-btn" onclick="goHome()" title="回到首頁">🏠</button>
         <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="摺疊/展開">☰</button>
     </div>
 
@@ -41,7 +41,7 @@
 
     <!-- 側邊欄底部 -->
     <div class="sidebar-footer">
-        <small>©2026 ETF 工具站</small>
+        <small>©2026 妙奇少 AI協作生活網</small>
     </div>
 </div>
 
@@ -141,7 +141,7 @@
     }
 
     .sidebar-link.active {
-        background: var(--text-success);
+        background: #34a853;
         color: white;
         font-weight: bold;
     }
@@ -167,20 +167,6 @@
         padding: 10px 4px;
     }
 
-    /* 主容器調整 */
-    body {
-        margin-left: 220px;
-        transition: margin-left 0.3s ease;
-    }
-
-    body.sidebar-collapsed {
-        margin-left: 60px;
-    }
-
-    .container {
-        margin-left: 0 !important;
-    }
-
     /* 響應式設計 */
     @media (max-width: 768px) {
         .sidebar {
@@ -189,14 +175,6 @@
 
         .sidebar.collapsed {
             width: 50px;
-        }
-
-        body {
-            margin-left: 180px;
-        }
-
-        body.sidebar-collapsed {
-            margin-left: 50px;
         }
 
         .sidebar-link {
@@ -225,14 +203,6 @@
             left: 0;
             width: 60px;
         }
-
-        body {
-            margin-left: 0;
-        }
-
-        .sidebar-toggle-btn {
-            display: block;
-        }
     }
 </style>
 
@@ -250,11 +220,9 @@
     }
 
     function setActiveLink(event) {
-        // 移除所有活躍狀態
         document.querySelectorAll('.sidebar-link').forEach(link => {
             link.classList.remove('active');
         });
-        // 設置當前鏈接為活躍
         if (event.target.classList.contains('sidebar-link')) {
             event.target.classList.add('active');
         }
@@ -268,15 +236,13 @@
             document.body.classList.add('sidebar-collapsed');
         }
 
-        // 設置當前頁面的活躍鏈接
-        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        const currentPage = window.location.pathname.split('/').pop() || 'home.html';
         document.querySelectorAll('.sidebar-link').forEach(link => {
             if (link.getAttribute('href') === currentPage) {
                 link.classList.add('active');
             }
         });
 
-        // 響應式：手機裝置觸摸處理
         if (window.innerWidth < 480) {
             document.addEventListener('click', (e) => {
                 const sidebar = document.getElementById('sidebar');
