@@ -3,93 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>車輛保養管理系統</title>
+    <title data-i18n="car-title">車輛保養管理系統</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="car-styles.css">
 </head>
 <body>
 
-<!-- 側邊欄容器 -->
 <div id="sidebarContainer"></div>
-
-<button class="theme-toggle" id="themeToggle" title="切換主題">🌙</button>
 
 <div class="container">
     <div class="header-section">
-        <h2>🚗 車輛保養紀錄</h2>
-        <div class="version-info">版本: 1.0</div>
+        <h2 data-i18n="car-title">🚗 車輛保養紀錄</h2>
+        <div class="version-info">版本: 1.1 (AI-Optimized)</div>
     </div>
 
     <div class="summary-card">
         <div class="summary-item">
-            <span class="summary-label">目前總里程</span>
+            <span class="summary-label" data-i18n="car-total-mileage">目前總里程</span>
             <div class="balance" id="displayTotalMileage">0 km</div>
         </div>
         <div class="summary-item">
-            <span class="summary-label">下次保養倒數</span>
+            <span class="summary-label" data-i18n="car-remaining">下次保養倒數</span>
             <div class="balance" id="displayRemainingKm">-- km</div>
         </div>
         <div class="summary-item">
-            <span class="summary-label">本月保養支出</span>
+            <span class="summary-label" data-i18n="car-month-cost">本月保養支出</span>
             <div class="amount expense-text" id="displayMonthCost">$0</div>
         </div>
     </div>
 
     <div class="form-section">
-        <h3>📝 新增保養項目</h3>
+        <h3 data-i18n="car-add-title">📝 新增保養項目</h3>
         <div class="form-group">
-            <label>保養日期：</label>
+            <label data-i18n="car-date">保養日期：</label>
             <input type="date" id="inputDate" class="form-input" required>
         </div>
         <div class="form-group">
-            <label>儀表里程 (km)：</label>
-            <input type="number" id="inputMileage" class="form-input" placeholder="輸入目前里程數">
+            <label data-i18n="car-mileage">儀表里程 (km)：</label>
+            <input type="number" id="inputMileage" class="form-input" data-i18n="car-mileage-placeholder" placeholder="輸入目前里程數">
         </div>
         <div class="form-group">
-            <label>維修項目：</label>
-            <input type="text" id="inputItem" class="form-input" placeholder="如：換機油、齒輪油">
+            <label data-i18n="car-item">維修項目：</label>
+            <input type="text" id="inputItem" class="form-input" data-i18n="car-item-placeholder" placeholder="如：換機油、齒輪油">
         </div>
         <div class="form-group">
-            <label>費用 (NTD)：</label>
-            <input type="number" id="inputCost" class="form-input" placeholder="輸入支出金額">
+            <label data-i18n="car-fee">費用 (NTD)：</label>
+            <input type="number" id="inputCost" class="form-input" data-i18n="car-fee-placeholder" placeholder="輸入支出金額">
         </div>
-        <button class="btn btn-success" onclick="addRecord()">✓ 儲存紀錄</button>
+        <button class="btn btn-success" onclick="addRecord()" data-i18n="car-save">✓ 儲存紀錄</button>
     </div>
 
-    <h3>📋 保養紀錄</h3>
+    <h3 data-i18n="car-records">📋 保養紀錄</h3>
     <div id="recordList" class="records-list"></div>
 </div>
 
-<!-- 側邊欄載入腳本 -->
-<script>
-    // 載入側邊欄
-    fetch('sidebar.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('sidebarContainer').innerHTML = html;
-            
-            // 設置側邊欄狀態
-            setTimeout(() => {
-                const isSidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-                if (isSidebarCollapsed) {
-                    const sidebar = document.getElementById('sidebar');
-                    if (sidebar) {
-                        sidebar.classList.add('collapsed');
-                        document.body.classList.add('sidebar-collapsed');
-                    }
-                }
-
-                // 設置當前頁面的活躍鏈接
-                const currentPage = 'car.html';
-                document.querySelectorAll('.sidebar-link').forEach(link => {
-                    if (link.getAttribute('href') === currentPage) {
-                        link.classList.add('active');
-                    }
-                });
-            }, 100);
-        })
-        .catch(err => console.log('側邊欄載入失敗:', err));
-</script>
-
+<script src="i18n.js"></script>
+<script src="script.js"></script>
 <script src="car-script.js"></script>
 
 </body>
