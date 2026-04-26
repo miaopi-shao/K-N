@@ -109,7 +109,7 @@ function closeSettings() {
 
 // 7. 回到主頁 (對應 sidebar.html 裡的 🏠 圖示)
 function goHome() {
-    window.location.href = 'welcome.html'; 
+    window.location.href = 'index.html'; 
 }
 
 // 8. 設定按鈕高亮 (修正：對齊 i18n.js 的變數名稱)
