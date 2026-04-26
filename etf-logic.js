@@ -1,55 +1,106 @@
-// etf-logic.js - ETF 精算器專用功能
-// 這裡保留你所有的專業計算，不亂動，只做「呼叫對接」
-
 // 1. 自動存檔與計算
 function autoSaveAndCalculate() {
     calculate();
-    // 這裡放你原本的 localStorage 儲存邏輯
-    console.log("數據已自動保存");
+    const rows = [];
+    document.querySelectorAll('#etfTable tbody tr').forEach(row => {
+        rows.push({
+            name: row.querySelector('.etf-name').value,
+            price: row.querySelector('.etf-price').value,
+            div: row.querySelector('.etf-div').value,
+            months: Array.from(row.querySelectorAll('.month-item.active')).map(m => m.textContent)
+        });
+    });
+    localStorage.setItem('etf_data', JSON.stringify(rows));
+    localStorage.setItem('etf_target', document.getElementById('targetIncome').value);
 }
 
-// 2. 核心計算邏輯
+// 2. 核心計算邏輯 (修正原本不顯示的問題)
 function calculate() {
-    // 這裡放你原本計算「需持有張數」、「投入本金」的公式
-    // 確保會抓取 id="targetIncome" 的值
-    console.log("執行領息總覽試算...");
+    const target = parseFloat(document.getElementById('targetIncome').value) || 0;
+    const rows = document.querySelectorAll('#etfTable tbody tr');
+    let totalInvestment = 0;
+
+    rows.forEach(row => {
+        const price = parseFloat(row.querySelector('.etf-price').value) || 0;
+        const div = parseFloat(row.querySelector('.etf-div').value) || 0;
+        const activeMonths = row.querySelectorAll('.month-item.active').length;
+
+        if (price > 0 && div > 0 && activeMonths > 0) {
+            // 計算邏輯：目標月薪 / (單次配息 * (12個月 / 配息次數))
+            // 這裡採用最穩健的試算：單次配息要領到多少才能支撐目標
+            const sharesNeeded = Math.ceil(target / div); 
+            const cost = sharesNeeded * price;
+            
+            row.querySelector('.row-result').innerHTML = 
+                `需持有: <b>${sharesNeeded.toLocaleString()}</b> 股<br>` +
+                `預估本金: <span style="color:var(--text-accent)">$${cost.toLocaleString()}</span>`;
+            totalInvestment += cost;
+        } else {
+            row.querySelector('.row-result').innerHTML = "等待輸入...";
+        }
+    });
+
+    const summary = document.getElementById('summaryBar');
+    if (summary) {
+        summary.innerHTML = `<h3>預估總投入資金：$${totalInvestment.toLocaleString()}</h3>`;
+    }
 }
 
-// 3. 表格操作 (新增/刪除)
-function addRow() {
+// 3. 表格操作 (補完 innerHTML)
+function addRow(savedData = null) {
     const table = document.getElementById('etfTable').getElementsByTagName('tbody')[0];
     const newRow = table.insertRow();
-    // 這裡放你原本生成 <td> 的那一大串 innerHTML
-    console.log("已新增 ETF 標的");
+    
+    newRow.innerHTML = `
+        <td><input type="text" class="form-input etf-name" value="${savedData?.name || ''}" placeholder="例: 00929" oninput="autoSaveAndCalculate()"></td>
+        <td><input type="number" class="form-input etf-price" value="${savedData?.price || ''}" placeholder="現價" oninput="autoSaveAndCalculate()"></td>
+        <td><input type="number" class="form-input etf-div" value="${savedData?.div || ''}" placeholder="配息" oninput="autoSaveAndCalculate()"></td>
+        <td>
+            <div class="month-box">
+                ${[1,2,3,4,5,6,7,8,9,10,11,12].map(m => {
+                    const isActive = savedData?.months?.includes(m.toString()) ? 'active' : '';
+                    return `<div class="month-item ${isActive}" onclick="toggleMonth(this)">${m}</div>`;
+                }).join('')}
+            </div>
+        </td>
+        <td class="row-result">---</td>
+        <td><button class="btn btn-danger" onclick="deleteRow(this)">🗑️</button></td>
+    `;
+    calculate();
 }
 
 function deleteRow(btn) {
     const row = btn.parentNode.parentNode;
     row.parentNode.removeChild(row);
-    calculate();
+    autoSaveAndCalculate();
 }
 
-// 4. 月份切換邏輯
+// 4. 月份切換
 function toggleMonth(el) {
     el.classList.toggle('active');
-    calculate();
+    autoSaveAndCalculate();
 }
 
-// 5. 備份功能
+// 5. 備份功能 (localStorage 實作)
 function handleSaveBackup() {
     const name = prompt('請輸入備份名稱:');
     if (name) {
-        saveBackup(name);
+        const data = localStorage.getItem('etf_data');
+        localStorage.setItem(`backup_${name}`, data);
+        alert("備份成功：" + name);
     }
 }
 
-function saveBackup(name) {
-    // 這裡放你原本的備份邏輯
-    console.log("備份成功：" + name);
-}
-
-// 6. 初始化載入
+// 6. 初始化載入 (從暫存回復數據)
 window.addEventListener('DOMContentLoaded', () => {
-    // 這裡放你原本一進頁面要載入暫存數據的邏輯
-    console.log("ETF 頁面邏輯已就緒");
+    const savedTarget = localStorage.getItem('etf_target');
+    if (savedTarget) document.getElementById('targetIncome').value = savedTarget;
+
+    const savedData = JSON.parse(localStorage.getItem('etf_data') || '[]');
+    if (savedData.length > 0) {
+        savedData.forEach(data => addRow(data));
+    } else {
+        addRow(); // 若無資料，預設開一行
+    }
+    console.log("ETF 數據已從 LocalStorage 載入");
 });
