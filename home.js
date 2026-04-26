@@ -22,34 +22,45 @@ function updateThemeIcon(theme) {
     themeToggle.title = theme === 'light' ? '切換到暗色主題' : '切換到亮色主題';
 }
 
-// 側邊欄載入
+// 側邊欄整合
 function loadSidebar() {
     fetch('sidebar.html')
         .then(response => response.text())
         .then(html => {
             document.getElementById('sidebarContainer').innerHTML = html;
-            
-            setTimeout(() => {
-                const isSidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-                if (isSidebarCollapsed) {
-                    const sidebar = document.getElementById('sidebar');
-                    if (sidebar) {
-                        sidebar.classList.add('collapsed');
+            // 執行側邊欄的初始化代碼
+            const script = document.createElement('script');
+            script.textContent = `
+                window.addEventListener('DOMContentLoaded', () => {
+                    const isSidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+                    if (isSidebarCollapsed) {
+                        document.getElementById('sidebar').classList.add('collapsed');
                         document.body.classList.add('sidebar-collapsed');
                     }
+
+                    const currentPage = window.location.pathname.split('/').pop() || 'accounting.html';
+                    document.querySelectorAll('.sidebar-link').forEach(link => {
+                        if (link.getAttribute('href') === currentPage) {
+                            link.classList.add('active');
+                        }
+                    });
+                });
+
+                function toggleSidebar() {
+                    const sidebar = document.getElementById('sidebar');
+                    sidebar.classList.toggle('collapsed');
+                    document.body.classList.toggle('sidebar-collapsed');
+                    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
                 }
 
-                const currentPage = 'home.html';
-                document.querySelectorAll('.sidebar-link').forEach(link => {
-                    if (link.getAttribute('href') === currentPage) {
-                        link.classList.add('active');
-                    }
-                });
-            }, 100);
+                function goHome() {
+                    window.location.href = 'welcome.html';
+                }
+            `;
+            document.body.appendChild(script);
         })
         .catch(err => console.log('側邊欄載入失敗:', err));
 }
-
 // 初始化
 window.addEventListener('DOMContentLoaded', () => {
     initTheme();
