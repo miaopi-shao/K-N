@@ -1,5 +1,29 @@
 <div id="settingsModal" class="settings-modal">
     <div class="settings-modal-content">
-        <button class="settings-btn" data-lang="zh-TW" onclick="setLanguage('zh-TW')">中文 (台灣)</button>
+        <div class="settings-header">
+            <h3>⚙️ 系統設定</h3>
+            <button class="close-btn" onclick="closeSettings()">×</button>
+        </div>
+
+        <div class="settings-section">
+            <p>語言 / Language</p>
+            <button class="settings-btn" onclick="setLanguage('zh-TW')">中文 (台灣)</button>
+            <button class="settings-btn" onclick="setLanguage('en')">English</button>
+        </div>
+
+        <div class="settings-section">
+            <p>字體大小 / Font Size</p>
+            <div class="font-settings">
+                <button class="settings-btn" onclick="setFontSize('small')">小</button>
+                <button class="settings-btn" onclick="setFontSize('normal')">一般</button>
+                <button class="settings-btn" onclick="setFontSize('large')">大</button>
+                <button class="settings-btn" onclick="setFontSize('xlarge')">特大</button>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <p>外觀主題 / Theme</p>
+            <button class="settings-btn" id="themeToggle" onclick="toggleTheme()">切換模式</button>
+        </div>
     </div>
 </div>
