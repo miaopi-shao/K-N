@@ -3,61 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ETF 月月配組合精算器</title>
+    <title>ETF 月月配精算器</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="etf-logic.css">
 </head>
 <body>
+
 <div class="container">
     <div class="header-section">
-        <h2>ETF 月月配組合領息試算</h2>
-        <div class="version-info">當前版本號: 1.5 (整合 1.4 核心)</div>
+        <h2>ETF 月月配組合試算</h2>
+        <div class="version-info">Ver 1.5</div>
     </div>
     
     <div class="config-section">
-        <label>每月目標領息金額：</label>
-        <input type="number" id="targetIncome" value="40000" style="width: 120px;" oninput="calculate()"> 元
-        <span style="margin-left: 15px; color: #666;">(目標是讓 1~12 月每個月都盡量達到此金額)</span>
+        <label>每月目標領息：</label>
+        <input type="number" id="targetIncome" value="40000" oninput="calculate()"> 元
     </div>
 
-    <div style="margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
-        <button class="btn btn-add" onclick="addRow()">+ 新增 ETF 標的</button>
-        <button class="btn btn-add" style="background-color: #34a853;" onclick="saveBackupPrompt()">💾 保存備份</button>
+    <div style="margin-bottom: 15px; display: flex; gap: 10px;">
+        <button class="btn btn-add" onclick="addRow()">+ 新增</button>
+        <button class="btn btn-save" onclick="saveBackupPrompt()">💾 備份</button>
     </div>
-
-    <details style="margin-bottom: 20px; padding: 15px; background: var(--bg-tertiary); border-radius: 8px; border: 1px solid var(--border-primary);">
-        <summary style="cursor: pointer; font-weight: bold; color: var(--text-accent);">📋 我的備份 (點擊展開)</summary>
-        <div id="backupList" style="margin-top: 15px;"></div>
-    </details>
 
     <table id="etfTable">
         <thead>
             <tr>
-                <th width="15%">ETF 名稱</th>
-                <th width="12%">單次配息(元/張)</th>
-                <th width="12%">參考股價(元)</th>
-                <th width="25%">配息月份 (點選切換)</th>
-                <th width="12%">需持有張數</th>
-                <th width="12%">投入本金</th>
-                <th width="10%">操作</th>
+                <th>名稱</th>
+                <th>配息/張</th>
+                <th>股價</th>
+                <th>配息月份</th>
+                <th>張數</th>
+                <th>本金</th>
+                <th>操作</th>
             </tr>
         </thead>
-        <tbody>
-            </tbody>
+        <tbody></tbody>
     </table>
 
-    <h3>每月領息總覽</h3>
     <div class="result-grid" id="monthGrid"></div>
 
     <div class="summary-bar">
-        <div>預估總投入本金：<span id="totalCapital" class="highlight">0</span> 萬元</div>
-        <div>平均月領金額：<span id="avgMonthly" class="highlight">0</span> 元</div>
+        <div>總本金：<span id="totalCapital" class="highlight">0</span> 萬</div>
+        <div>均月領：<span id="avgMonthly" class="highlight">0</span> 元</div>
     </div>
 </div>
 
 <script src="i18n.js"></script>
 <script src="script.js"></script>
 <script src="etf-logic.js"></script>
-
 </body>
 </html>
