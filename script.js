@@ -2,6 +2,14 @@
 // script.js - 全站核心控管 (修正對接版)
 
 document.addEventListener('DOMContentLoaded', () => {
+    // 💡 新增：首頁導向邏輯 (解決問題 1)
+    const path = window.location.pathname.split('/').pop();
+    if ((path === 'index.html' || path === '') && !sessionStorage.getItem('visited')) {
+        sessionStorage.setItem('visited', 'true');
+        window.location.href = 'welcome.html';
+        return; 
+    }
+
     // 💡 1. 優先載入字體與語言 (i18n.js 負責)
     if (typeof initI18n === 'function') initI18n(); 
 
@@ -46,11 +54,11 @@ function loadCoreModules() {
             .then(html => {
                 sidebarContainer.innerHTML = html;
                 
-                // 💡 關鍵對接：側邊欄出來後立刻做三件事
+                // 💡 關鍵對接：側邊欄出來後立刻做四件事
                 if (typeof applyTranslations === 'function') applyTranslations(); // 1. 翻譯
                 updateThemeIcon(localStorage.getItem('theme') || 'light');        // 2. 顯示正確主題圖示
-                syncSidebarState();                                              // 3. 同步縮放狀態
-                markActivePage();                                                // 4. 高亮當前頁
+                syncSidebarState();                                               // 3. 同步縮放狀態
+                markActivePage();                                                 // 4. 高亮當前頁
             });
     }
 
@@ -101,7 +109,7 @@ function closeSettings() {
 
 // 7. 回到主頁 (對應 sidebar.html 裡的 🏠 圖示)
 function goHome() {
-    window.location.href = 'index.html'; 
+    window.location.href = 'welcome.html'; 
 }
 
 // 8. 設定按鈕高亮 (修正：對齊 i18n.js 的變數名稱)
