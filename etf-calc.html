@@ -3,53 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ETF 月月配組合精算器</title>
-
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="etf-calc.css">
+    <title>ETF 月月配組合精算器 v1.5</title>
+    <link rel="stylesheet" href="etf-logic.css">
 </head>
 <body>
 
-    <div class="container">
-        <header class="header-section">
-            <h1 data-i18n="etf-title">📊 ETF 月月配組合精算器</h1>
-            <div class="header-btns">
-                <button class="btn btn-primary" onclick="addRow()" data-i18n="etf-add-btn">➕ 新增標的</button>
-                <button class="btn btn-secondary" onclick="handleSaveBackup()" data-i18n="etf-save-btn">💾 儲存備份</button>
-            </div>
-        </header>
+<button class="theme-toggle" id="themeToggle" title="切換主題">🌙</button>
 
-        <section class="config-section">
-            <div class="form-group">
-                <label data-i18n="etf-target-label">🎯 目標月領息：</label>
-                <input type="number" id="targetIncome" value="10000" oninput="calculate()" class="form-input">
-            </div>
-        </section>
-
-        <div class="table-wrapper">
-            <table id="etfTable">
-                <thead>
-                    <tr>
-                        <th data-i18n="etf-th-code">代號/名稱</th>
-                        <th data-i18n="etf-th-price">現價</th>
-                        <th data-i18n="etf-th-dividend">配息金額</th>
-                        <th data-i18n="etf-th-months">配息月份</th>
-                        <th data-i18n="etf-th-calc">試算結果</th>
-                        <th data-i18n="etf-th-action">操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    </tbody>
-            </table>
-        </div>
-
-        <div class="summary-bar" id="summaryBar">
-            </div>
+<div class="container">
+    <div class="header-section">
+        <h2>ETF 月月配組合領息試算</h2>
+        <div class="version-info">當前版本號: 1.5 (基於 1.4 優化)</div>
     </div>
-        </div>
+    
+    <div class="config-section">
+        <label>每月目標領息金額：</label>
+        <input type="number" id="targetIncome" value="40000" oninput="calculate()"> 元
+        <span class="hint">(目標讓 1~12 月均達標)</span>
+    </div>
 
-    <script src="etf-calc.js"></script>
-    <script src="script.js"></script>
-    <script src="i18n.js"></script>
+    <div class="action-bar">
+        <button class="btn btn-add" onclick="addRow()">+ 新增 ETF 標的</button>
+        <button class="btn btn-save" onclick="saveBackupPrompt()">💾 保存備份</button>
+    </div>
+
+    <details class="backup-container">
+        <summary>📋 我的備份列表</summary>
+        <div id="backupList"></div>
+    </details>
+
+    <div class="table-wrapper">
+        <table id="etfTable">
+            <thead>
+                <tr>
+                    <th>ETF 名稱</th>
+                    <th>單次配息(元/張)</th>
+                    <th>參考股價(元)</th>
+                    <th>配息月份 (點選)</th>
+                    <th>需持有張數</th>
+                    <th>投入本金</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+    </div>
+
+    <h3>每月領息總覽</h3>
+    <div class="result-grid" id="monthGrid"></div>
+
+    <div class="summary-bar">
+        <div>總投入本金：<span id="totalCapital" class="highlight">0</span> 萬元</div>
+        <div>平均月領：<span id="avgMonthly" class="highlight">0</span> 元</div>
+    </div>
+</div>
+
+<script src="etf-logic.js"></script>
 </body>
 </html>
