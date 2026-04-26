@@ -118,6 +118,55 @@ function initAccounting() {
     render();
 }
 
+// 6.  
+function calculate() {
+    const target = parseFloat(document.getElementById("targetIncome").value) || 0;
+    const rows = document.querySelectorAll("#etfTable tbody tr");
+    let monthlyIncome = new Array(12).fill(0);
+    let totalCapital = 0;
+
+    rows.forEach(row => {
+        const div = parseFloat(row.querySelector(".dividend")?.value || row.querySelector("input[type='number']")?.value) || 0;
+        const price = parseFloat(row.querySelectorAll("input[type='number']")[1]?.value) || 0;
+        const activeMonths = Array.from(row.querySelectorAll(".month-item.active")).map(el => parseInt(el.innerText));
+
+        if (activeMonths.length === 0 || div === 0) {
+            row.querySelector(".shares").innerText = "0 張";
+            row.querySelector(".cost").innerText = "0 萬元";
+            return;
+        }
+
+        // 核心邏輯：張數 = 目標 / 單次配息
+        let shares = (target / div).toFixed(1);
+        let costInWan = (shares * price * 1000) / 10000;
+
+        row.querySelector(".shares").innerText = shares + " 張";
+        row.querySelector(".cost").innerText = costInWan.toFixed(1) + " 萬元";
+        totalCapital += costInWan;
+
+        activeMonths.forEach(m => {
+            monthlyIncome[m-1] += (shares * div);
+        });
+    });
+
+    // 渲染月份卡片 (含達標判斷)
+    const grid = document.getElementById("monthGrid");
+    grid.innerHTML = monthlyIncome.map((amt, i) => {
+        const isLow = amt < target * 0.95; // 稍微放寬 5% 判定
+        return `
+            <div class="month-card ${isLow ? 'low-income' : ''}">
+                <h4>${i+1} 月</h4>
+                <div class="amt">${Math.round(amt).toLocaleString()}</div>
+                <div style="font-size:0.7em; opacity:0.7;">${isLow ? '未達標' : '已達標'}</div>
+            </div>
+        `;
+    }).join('');
+
+    document.getElementById("totalCapital").innerText = totalCapital.toFixed(1);
+    const avg = monthlyIncome.reduce((a,b) => a+b, 0) / 12;
+    document.getElementById("avgMonthly").innerText = Math.round(avg).toLocaleString();
+}
+
 // 監聽全站載入完畢後啟動
 window.addEventListener('DOMContentLoaded', initAccounting);
 
