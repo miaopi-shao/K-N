@@ -1,25 +1,14 @@
-// 初始化預設資料
-const defaultData = [
-    { name: "0056", dividend: 866, price: 37, months: [1, 4, 7, 10] }
-];
+/**
+ * ETF 月月配核心邏輯 (繼承自 1.4 版本)
+ */
 
-function init() {
-    const saved = localStorage.getItem('etf_backup_current');
-    if (saved) {
-        renderTable(JSON.parse(saved));
-    } else {
-        defaultData.forEach(item => addRow(item));
-    }
-    calculate();
-}
-
-function addRow(data = { name: "新標的", dividend: 0, price: 0, months: [] }) {
+function addRow(data = {name: '0056', div: 866, price: 37, months: [1,4,7,10]}) {
     const tbody = document.querySelector("#etfTable tbody");
     const tr = document.createElement("tr");
     
     tr.innerHTML = `
         <td><input type="text" value="${data.name}" class="name" oninput="calculate()"></td>
-        <td><input type="number" value="${data.dividend}" class="dividend" oninput="calculate()"></td>
+        <td><input type="number" value="${data.div}" class="dividend" oninput="calculate()"></td>
         <td><input type="number" value="${data.price}" class="price" oninput="calculate()"></td>
         <td>
             <div class="month-box">
@@ -30,7 +19,7 @@ function addRow(data = { name: "新標的", dividend: 0, price: 0, months: [] })
         </td>
         <td class="shares">0</td>
         <td class="cost">0</td>
-        <td><button class="btn btn-del" onclick="deleteRow(this)">刪除</button></td>
+        <td><button class="btn btn-del" onclick="this.closest('tr').remove();calculate();">刪除</button></td>
     `;
     tbody.appendChild(tr);
     calculate();
@@ -41,15 +30,10 @@ function toggleMonth(el) {
     calculate();
 }
 
-function deleteRow(btn) {
-    btn.closest('tr').remove();
-    calculate();
-}
-
 function calculate() {
     const target = parseFloat(document.getElementById("targetIncome").value) || 0;
     const rows = document.querySelectorAll("#etfTable tbody tr");
-    let monthlyIncomes = new Array(12).fill(0);
+    let monthlyIncome = new Array(12).fill(0);
     let totalCapital = 0;
 
     rows.forEach(row => {
@@ -57,59 +41,56 @@ function calculate() {
         const price = parseFloat(row.querySelector(".price").value) || 0;
         const activeMonths = Array.from(row.querySelectorAll(".month-item.active")).map(m => parseInt(m.innerText));
         
-        if (div > 0 && activeMonths.length > 0) {
-            // 以「單次配息月份」去撐住目標
-            const sharesNeeded = (target / div).toFixed(2);
-            const cost = ((sharesNeeded * price) / 10000).toFixed(2);
+        if (div > 0) {
+            // 核心公式：每月目標 / 單季配息 = 需持有張數 (1.4 版邏輯)
+            const sharesNeeded = (target / div).toFixed(1);
+            const cost = ((sharesNeeded * price) / 10000).toFixed(1);
             
             row.querySelector(".shares").innerText = sharesNeeded + " 張";
             row.querySelector(".cost").innerText = cost + " 萬";
             
             totalCapital += parseFloat(cost);
             activeMonths.forEach(m => {
-                monthlyIncomes[m-1] += (sharesNeeded * div);
+                monthlyIncome[m-1] += (sharesNeeded * div);
             });
         }
     });
 
-    updateUI(monthlyIncomes, totalCapital);
-    localStorage.setItem('etf_backup_current', JSON.stringify(getTableData()));
-}
-
-function updateUI(monthlyIncomes, totalCapital) {
-    document.getElementById("totalCapital").innerText = totalCapital.toFixed(2);
-    const avg = monthlyIncomes.reduce((a, b) => a + b, 0) / 12;
-    document.getElementById("avgMonthly").innerText = avg.toLocaleString(undefined, {maximumFractionDigits: 0});
+    // 更新總覽介面
+    document.getElementById("totalCapital").innerText = totalCapital.toFixed(1);
+    const avg = monthlyIncome.reduce((a, b) => a + b, 0) / 12;
+    document.getElementById("avgMonthly").innerText = Math.round(avg).toLocaleString();
 
     const grid = document.getElementById("monthGrid");
-    grid.innerHTML = monthlyIncomes.map((amt, i) => `
-        <div class="month-card">
+    grid.innerHTML = monthlyIncome.map((amt, i) => `
+        <div class="month-card ${amt >= (target * 0.9) ? 'reach' : ''}">
             <div class="m-title">${i+1}月</div>
-            <div class="m-value ${amt >= (parseFloat(document.getElementById("targetIncome").value)*0.95) ? 'reach' : ''}">
-                ${amt.toLocaleString(undefined, {maximumFractionDigits:0})}
-            </div>
+            <div class="m-value">${Math.round(amt).toLocaleString()}</div>
         </div>
     `).join('');
 }
 
-// 備份邏輯 (保持 1.4 版習慣)
-function getTableData() {
-    return Array.from(document.querySelectorAll("#etfTable tbody tr")).map(row => ({
-        name: row.querySelector(".name").value,
-        dividend: row.querySelector(".dividend").value,
-        price: row.querySelector(".price").value,
-        months: Array.from(row.querySelectorAll(".month-item.active")).map(m => parseInt(m.innerText))
-    }));
-}
-
+// 備份功能 (1.4 版格式)
 function saveBackupPrompt() {
     const name = prompt("請輸入備份名稱:");
-    if (name) {
-        const backups = JSON.parse(localStorage.getItem('etf_backups') || '{}');
-        backups[name] = { target: document.getElementById("targetIncome").value, data: getTableData() };
-        localStorage.setItem('etf_backups', JSON.stringify(backups));
-        renderBackupList();
-    }
+    if (!name) return;
+    const data = {
+        target: document.getElementById("targetIncome").value,
+        items: Array.from(document.querySelectorAll("#etfTable tbody tr")).map(row => ({
+            name: row.querySelector(".name").value,
+            div: row.querySelector(".dividend").value,
+            price: row.querySelector(".price").value,
+            months: Array.from(row.querySelectorAll(".month-item.active")).map(m => parseInt(m.innerText))
+        }))
+    };
+    const backups = JSON.parse(localStorage.getItem('etf_backups') || '{}');
+    backups[name] = data;
+    localStorage.setItem('etf_backups', JSON.stringify(backups));
+    renderBackupList();
 }
 
-window.onload = init;
+// 初始化
+window.onload = () => {
+    addRow(); 
+    // 若 script.js 裡有其他初始化邏輯，會在這裡一併執行
+};
