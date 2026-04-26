@@ -16,7 +16,7 @@
             <span class="tab-icon" data-i18n="acc-tab-year">📊</span>
         </div>
         <div class="tab-item" onclick="showPage('month')">
-            <span class="tab-icon" ata-i18n="acc-tab-month">📅</span>
+            <span class="tab-icon" data-i18n="acc-tab-month">📅</span>
         </div>
         <div class="tab-item" onclick="showPage('day')">
             <span class="tab-icon" data-i18n="acc-tab-add">📝</span>
@@ -68,9 +68,7 @@
             </div>
         </div>
     </div>
-    <!-- 頁面內容 -->
 
-    <!-- 月明細頁面 -->
     <div id="page-month" class="page">
         <div class="filter-section">
             <input type="month" id="monthFilter" onchange="render()" class="month-input">
@@ -79,7 +77,6 @@
         <div id="monthList" class="records-list"></div>
     </div>
     
-    <!-- 新增記錄頁面 -->
     <div id="page-day" class="page hidden">
         <div class="form-section">
             <h3 data-i18n="acc-add-title">新增紀錄</h3>
@@ -114,7 +111,6 @@
         </div>
     </div>
     
-    <!-- 年統計頁面 -->
     <div id="page-year" class="page hidden">
         <div class="form-section">
             <label>選擇年份：</label>
@@ -132,49 +128,49 @@
         </div>
     </div>
 
-    <!-- 範本設定頁面 -->
     <div id="page-template" class="page hidden">
-    <div class="form-section">
-        <h3 data-i18n="acc-tab-tpl">範本設定</h3>
-        <div class="form-group">
-            <label>週期：</label>
-            <select id="tplMonth" class="form-input">
-                <option value="all">每月重複</option>
-                <option value="01">1月</option><option value="02">2月</option><option value="03">3月</option>
-                <option value="04">4月</option><option value="05">5月</option><option value="06">6月</option>
-                <option value="07">7月</option><option value="08">8月</option><option value="09">9月</option>
-                <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
-            </select>
+        <div class="form-section">
+            <h3 data-i18n="acc-tab-tpl">範本設定</h3>
+            <div class="form-group">
+                <label>週期：</label>
+                <select id="tplMonth" class="form-input">
+                    <option value="all">每月重複</option>
+                    <option value="01">1月</option><option value="02">2月</option><option value="03">3月</option>
+                    <option value="04">4月</option><option value="05">5月</option><option value="06">6月</option>
+                    <option value="07">7月</option><option value="08">8月</option><option value="09">9月</option>
+                    <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>日期 (1~31)：</label>
+                <input type="number" id="tplDay" value="1" min="1" max="31" class="form-input">
+            </div>
+            <div class="form-group">
+                <label>項目名稱：</label>
+                <input type="text" id="tplItem" placeholder="例：房租、薪資..." class="form-input">
+            </div>
+            <div class="form-group">
+                <label>金額：</label>
+                <input type="number" id="tplAmount" placeholder="正數為收入，負數為支出" class="form-input">
+            </div>
+            <div class="form-group">
+                <label>分類：</label>
+                <select id="tplType" class="form-input">
+                    <option value="預設支出">預設支出</option>
+                    <option value="外送薪水">外送薪水</option>
+                    <option value="股息收入">股息收入</option>
+                    <option value="租金">租金</option>
+                    <option value="公用事業">公用事業</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>備註：</label>
+                <input type="text" id="tplNote" placeholder="額外說明" class="form-input">
+            </div>
+            <button class="btn btn-success" onclick="saveTemplate()" style="width: 100%;">✓ 加入範本</button>
+            <hr class="section-divider">
+            <div id="templateList"></div>
         </div>
-        <div class="form-group">
-            <label>日期 (1~31)：</label>
-            <input type="number" id="tplDay" value="1" min="1" max="31" class="form-input">
-        </div>
-        <div class="form-group">
-            <label>項目名稱：</label>
-            <input type="text" id="tplItem" placeholder="例：房租、薪資..." class="form-input">
-        </div>
-        <div class="form-group">
-            <label>金額：</label>
-            <input type="number" id="tplAmount" placeholder="正數為收入，負數為支出" class="form-input">
-        </div>
-        <div class="form-group">
-            <label>分類：</label>
-            <select id="tplType" class="form-input">
-                <option value="預設支出">預設支出</option>
-                <option value="外送薪水">外送薪水</option>
-                <option value="股息收入">股息收入</option>
-                <option value="租金">租金</option>
-                <option value="公用事業">公用事業</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>備註：</label>
-            <input type="text" id="tplNote" placeholder="額外說明" class="form-input">
-        </div>
-        <button class="btn btn-success" onclick="saveTemplate()" style="width: 100%;">✓ 加入範本</button>
-        <hr class="section-divider">
-        <div id="templateList"></div>
     </div>
 </div>
 
