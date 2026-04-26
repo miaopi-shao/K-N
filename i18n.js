@@ -99,7 +99,7 @@ const translations = {
         'acc-date': '日期：',
         'acc-item': '項目：',
         'acc-amount': '金額：',
-        'acc-note': '備註：'
+        'acc-note': '備註：',
         
         // Car Page
         'car-title': '🚗 車輛保養紀錄',
