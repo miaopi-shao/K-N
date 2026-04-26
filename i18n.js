@@ -507,8 +507,16 @@ function applyFontSize() {
     root.style.fontSize = sizes[size] || '16px';
 }
 
-// 頁面加載時初始化
-window.addEventListener('DOMContentLoaded', () => {
+// 封裝成一個對外窗口，讓 script.js 呼叫
+function initI18n() {
     applyTranslations();
     applyFontSize();
-});
+}
+
+// 雖然 script.js 會呼叫，但為了保險（萬一某頁沒用 script.js），
+// 我們還是留一個初始化，但確保它只在 script.js 不存在時才自跑。
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initI18n);
+} else {
+    initI18n();
+}
