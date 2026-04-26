@@ -1,21 +1,18 @@
-/* ==========================================================================
-   記帳區 1.5 視覺優化 (對接截圖視覺)
-   ========================================================================== */
-
-/* 1. 看板區：對齊截圖的亮色卡片風格 */
-.account-summary {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+/* 1. 盈餘統計卡片 (格子回歸) */
+.summary-card {
+    display: flex;
     gap: 15px;
     margin: 20px 0;
 }
 
-.acc-card {
+.summary-item {
+    flex: 1;
     background: #ffffff;
     border-radius: 12px;
-    padding: 25px;
+    padding: 20px;
     text-align: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08); /* 增加陰影讓層次變明顯 */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08); /* 強化截圖中的陰影感 */
+    border: 1px solid #f0f0f0;
 }
 
 .summary-label {
@@ -25,13 +22,13 @@
     margin-bottom: 8px;
 }
 
-.amt {
-    font-size: 2.2em; /* 字體加大解決眼花問題 */
+.balance, .amount {
+    font-size: 2.2em; /* 字體加大，對齊截圖 */
     font-weight: 900;
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* 2. 列表項目：對齊截圖的條狀配色 */
+/* 2. 帳務列表條目 */
 .record-item {
     display: flex;
     justify-content: space-between;
@@ -40,47 +37,42 @@
     margin-bottom: 10px;
     border-radius: 10px;
     border-left: 8px solid #ccc;
-    transition: 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-/* 收入綠條 */
-.record-item.income {
-    background-color: #dcfce7;
-    border-left-color: #22c55e;
-}
+.record-item.income { background-color: #dcfce7; border-left-color: #22c55e; }
+.record-item.expense { background-color: #fee2e2; border-left-color: #ef4444; }
 
-/* 支出紅條 */
-.record-item.expense {
-    background-color: #fee2e2;
-    border-left-color: #ef4444;
-}
-
-.record-title {
-    font-size: 1.1em;
-    display: block;
-    color: #000;
-}
-
-.record-amount {
-    font-size: 0.9em;
-    color: #444;
-}
-
-/* 3. 修正編輯按鈕：黑色底小按鈕 */
-.edit-btn {
+/* 3. 黑色修改按鈕 */
+.mod-btn {
     background: #333;
     color: #fff;
     border: none;
-    padding: 6px 12px;
+    padding: 8px 16px;
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
 }
 
-/* 4. 分頁標籤 Icon 重複修正 (防止疊影) */
-.tab-icon {
-    margin-right: 5px;
-    font-style: normal;
+/* 4. 年統計表格 */
+.yearly-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
 }
+.yearly-table th, .yearly-table td {
+    padding: 12px;
+    border: 1px solid #eee;
+    text-align: center;
+}
+.yearly-table th { background: #f8f9fa; }
 
+/* 5. 彈窗與隱藏控制 */
+.modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000;
+}
+.modal-content { background: #fff; padding: 30px; border-radius: 15px; width: 90%; max-width: 450px; }
 .hidden { display: none !important; }
