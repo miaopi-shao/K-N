@@ -1,15 +1,111 @@
-/* 月份選擇按鈕 (1.4 魂) */
-.month-selector { display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; width: 160px; margin: auto; }
-.m-bit { border: 1px solid #ccc; font-size: 11px; cursor: pointer; padding: 2px 0; background: #fff; text-align: center; color: #333; }
-.m-bit.active { background-color: #34495e; color: #fff; border-color: #2c3e50; }
+/* 容器還原：增加質感陰影與間距 */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
 
-/* 12個月總覽格 */
-.result-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 15px; }
-.m-card { background: #fff; border: 1px solid #ddd; padding: 10px; text-align: center; border-radius: 4px; }
-.m-card.reach { background-color: #e8f8f5; border-top: 4px solid #2ecc71; }
+/* 配置區：還原淺藍色塊與對齊 */
+.config-section {
+    background: #eef4ff; 
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #d0e0ff;
+}
 
-.m-title { font-size: 12px; color: #7f8c8d; }
-.m-val { font-weight: bold; font-size: 1.1rem; color: #2c3e50; }
+/* 核心表格校正：解決截圖中欄位擠壓問題 */
+#etfTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
 
-/* 表格內輸入框微調 */
-#etfTable input.form-input { width: 90%; text-align: center; }
+#etfTable th {
+    background: #5f6368; /* 深灰色表頭 */
+    color: white;
+    padding: 12px;
+    font-weight: bold;
+    border: 1px solid #ddd;
+}
+
+#etfTable td {
+    padding: 15px;
+    border: 1px solid #eee;
+    text-align: center;
+}
+
+/* 月份選擇器按鈕組：校正回 2x6 矩陣 */
+.month-box {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+    width: 200px;
+    margin: auto;
+}
+
+.month-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 5px 0;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.month-item.active {
+    background: #34a853 !important; /* 已選月份綠色 */
+    color: white !important;
+}
+
+/* 月份領息卡片：還原紅綠判定視覺 */
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.month-card {
+    background: #fff;
+    border: 1px solid #ffcdd2; /* 預設未達標紅框 */
+    background-color: #ffebee; /* 預設未達標粉紅底 */
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.month-card.reach {
+    border-color: #c8e6c9;
+    background-color: #f1f8e9; /* 達標綠底 */
+}
+
+.month-card .amt {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #d32f2f;
+}
+
+.month-card.reach .amt {
+    color: #2e7d32;
+}
+
+/* 底部總覽列：深黑色背景與強調色文字 */
+.summary-bar {
+    background: #202124;
+    color: #fff;
+    padding: 20px 30px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.highlight-wan { color: #fbbc04; font-weight: bold; font-size: 1.5rem; }
+.highlight-avg { color: #87ceeb; font-weight: bold; font-size: 1.5rem; }
